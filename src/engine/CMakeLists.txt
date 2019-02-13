@@ -1,0 +1,15 @@
+target_sources(cg-exercises
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/Camera.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Camera.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Game.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Game.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/GameObject.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/GameObject.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/GlobalStateManager.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/InputDefinitions.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/InputManager.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/InputManager.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Window.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Window.hpp
+        )

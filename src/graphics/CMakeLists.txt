@@ -1,0 +1,19 @@
+target_sources(cg-exercises
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/CubeMap.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/CubeMap.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/GLSLShader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/GLSLShader.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Light.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Light.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Mesh.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Mesh.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Model.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Model.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Skybox.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Skybox.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Terrain.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Terrain.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Texture.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Texture.hpp
+        )
