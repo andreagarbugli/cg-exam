@@ -3,6 +3,7 @@ module.exports = {
     description: "Just playing around",
     // base: "/docs/",
     base: "/cg-exam/",
+    dest: "docs",
     themeConfig: {
         sidebar: ["/", "engine-core", "graphics", "game", "utils"],
         // sidebar: [
