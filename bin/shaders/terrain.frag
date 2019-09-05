@@ -1,6 +1,7 @@
 #version 330
 
-#define NR_POINT_LIGHTS 1
+#define NR_POINT_LIGHTS 5
+#define NR_SPOT_LIGHTS 2
 
 out vec4 FragColor;
 
@@ -22,9 +23,9 @@ struct Terrain {
 
 struct Light {
 
-    // positon per point light
-    // direction per directional light
-    // con spot light si usano entrambe
+// positon per point light
+// direction per directional light
+// con spot light si usano entrambe
     vec3 position;
     vec3 direction;
 
@@ -32,24 +33,29 @@ struct Light {
     vec3 diffuse;
     vec3 specular;
 
-    // per point light
+// per point light
     float constant;
     float linear;
     float quadratic;
 
-    // per spot light
+// per spot light
     float cutOff;
     float outerCutOff;
 };
 
+uniform sampler2D shadowMap;
+
 uniform Terrain terrain;
 
 uniform Light dirLight;
+
+uniform int numPointLights;
+uniform int numSpotLights;
+
 uniform Light pointLigths[NR_POINT_LIGHTS];
+uniform Light spotLigths[NR_SPOT_LIGHTS];
 
 uniform vec3 viewPos;
-
-uniform vec4 objectColor;
 
 vec3 calcDirectionalLight(Light light, vec3 terrainDiffuse, vec3 normal, vec3 viewDir)
 {
@@ -83,7 +89,7 @@ vec3 calcPointLight(Light light, vec3 terrainDiffuse, vec3 normal, vec3 fragPos,
     // attenuation
     float distance = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * distance +
-                        light.quadratic * (distance * distance));
+    light.quadratic * (distance * distance));
 
     vec3 ambient = light.ambient * terrainDiffuse;
     vec3 diffuse = light.diffuse * diff * terrainDiffuse;
@@ -96,6 +102,39 @@ vec3 calcPointLight(Light light, vec3 terrainDiffuse, vec3 normal, vec3 fragPos,
     return (ambient + diffuse + specular);
 }
 
+vec3 calcSpotLight(Light light, vec3 terrainDiffuse, vec3 normal, vec3 fragPos, vec3 viewDir)
+{
+    vec3 lightDir = normalize(light.position - fragPos);
+
+    float theta     = dot(lightDir, normalize(-light.direction));
+    float epsilon   = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0, 1.0);
+
+
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), terrain.shininess);
+
+    // attenuation
+    float distance = length(light.position - fragPos);
+    float attenuation = 1.0 / (light.constant + light.linear * distance +
+    light.quadratic * (distance * distance));
+
+    vec3 ambient = light.ambient * terrainDiffuse;
+    vec3 diffuse = light.diffuse * diff * terrainDiffuse;
+    vec3 specular = light.specular * spec * vec3(texture(terrain.specular, TexCoord0));
+
+    ambient *= intensity * attenuation;
+    diffuse *= intensity * attenuation;
+    specular *= intensity * attenuation;
+
+    return (ambient + diffuse + specular);
+}
+
+
 void main()
 {
     // If you'd fail to specify an output color in your
@@ -103,9 +142,9 @@ void main()
 
     vec4 blendMapColour = texture(terrain.blendMap, TexCoord0);
 
-    float backTextureAmmount = 1 - (blendMapColour.r + blendMapColour.g + blendMapColour.b);
+    float backTextureAmmount = 1 - (blendMapColour.r + blendMapColour.g);
 
-    vec2 titledCoords = TexCoord0 * 40.0;
+    vec2 titledCoords = TexCoord0 * 250.0;
 
     vec4 backTextureColor = texture(terrain.back, titledCoords) * backTextureAmmount;
     vec4 rockTextureColor = texture(terrain.rock, titledCoords) * blendMapColour.r;
@@ -116,14 +155,23 @@ void main()
     vec3 norm = normalize(Normal);
     vec3 viewDir = normalize(viewPos - FragPos);
 
-    vec3 result = calcDirectionalLight(dirLight, totalColor, norm, viewDir);
+    vec3 result =  calcDirectionalLight(dirLight, totalColor, norm, viewDir);
 
     for (int i = 0; i < NR_POINT_LIGHTS; i++)
     {
-        result += calcPointLight(pointLigths[i], totalColor, norm, FragPos, viewDir);
+        if (i >= numPointLights)
+            break;
+
+        result +=calcPointLight(pointLigths[i], totalColor, norm, FragPos, viewDir);
     }
 
-    vec4 colorResult = vec4(result, 1.0) * objectColor;
+    for (int i = 0; i < NR_SPOT_LIGHTS; i++)
+    {
+        if (i >= numSpotLights)
+            break;
 
-    FragColor = colorResult;
+        result += calcSpotLight(spotLigths[i], totalColor, norm, FragPos, viewDir);
+    }
+
+    FragColor = vec4(result, 1.0);
 }

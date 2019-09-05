@@ -1,2 +1,2 @@
-add_subdirectory(glew)
+add_subdirectory(gl3w)
 add_subdirectory(glm)

@@ -1,6 +1,6 @@
 # Blender v2.80 (sub 43) OBJ File: ''
 # www.blender.org
-mtllib Fir_Tree.mtl
+mtllib ./models/Fir_Tree.mtl
 o Fir-tree_Cylinder.002
 v 0.000000 0.000083 -0.134979
 v 0.000000 5.155241 -0.030541

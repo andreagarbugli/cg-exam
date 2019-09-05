@@ -1,5 +1,5 @@
-#ifndef ENGINE_VERTEXARRAY_HPP
-#define ENGINE_VERTEXARRAY_HPP
+#ifndef ENGINE_MESH_HPP
+#define ENGINE_MESH_HPP
 
 #include "utils/ObjFileLoader.hpp"
 
@@ -46,4 +46,4 @@ namespace Graphics
 
 }
 
-#endif //ENGINE_VERTEXARRAY_HPP
+#endif //ENGINE_MESH_HPP

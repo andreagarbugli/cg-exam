@@ -1,7 +1,3 @@
-//
-// Created by andrea on 08/02/19.
-//
-
 #include <iostream>
 
 #include "Model.hpp"
@@ -21,11 +17,15 @@ namespace Graphics
     {
     }
 
-    void Model::Draw()
+    void Model::Draw(BasicShader* shader)
     {
-        for (auto const& mesh : _meshes)
+        for (auto const& meshIt : _meshes)
         {
-            mesh.second->Use();
+            auto subModel = meshIt.second;
+
+            _shader->SetModel(subModel);
+
+            subModel->mesh->Use();
         }
     }
 
@@ -36,26 +36,52 @@ namespace Graphics
         if (loader.LoadObj(objfilePath, true))
         {
             auto rawMeshes = loader.GetMeshes();
+            auto materials = loader.GetMaterials();
+
+            for (auto& material : materials)
+            {
+                _materials.emplace(material->name, material);
+            }
 
             for (auto& rawMesh : rawMeshes)
             {
                 cout << "Numero of vertices: " << rawMesh->vertices.size() << endl;
                 auto mesh = new Mesh(*rawMesh);
-                _meshes.emplace(rawMesh->name, mesh);
+                auto material = _materials[rawMesh->materialName];
+
+                auto subModel = new SubModel{
+                        this,
+                        mesh,
+                        material,
+                        false
+                };
+
+                if (!material->mapKs.empty() &&
+                    !material->mapKd.empty())
+                {
+                    _AddTexture(material->mapKd);
+                    _AddTexture(material->mapKs);
+                    subModel->hasTextures = true;
+                }
+
+                _meshes.emplace(rawMesh->name, subModel);
             }
+
         }
         else
         {
             cerr << "Failed to load model: " << objfilePath << endl;
             return false;
         }
+
+        return true;
     }
 
-    void Model::AddTexture(std::string name, std::string filePath)
+    void Model::_AddTexture(std::string filePath)
     {
         auto texture = new Texture();
         texture->Load(filePath);
-        _textures.emplace(name, texture);
+        _textures.emplace(filePath, texture);
     }
 
     unsigned int Model::GetDrawingOrder() const
@@ -68,12 +94,7 @@ namespace Graphics
         _drawingOder = order;
     }
 
-    GLSLShader* Model::GetShader()
-    {
-        return _shader;
-    }
-
-    void Model::SetShader(GLSLShader* shader)
+    void Model::SetShader(BasicShader* shader)
     {
         _shader = shader;
     }
@@ -83,4 +104,8 @@ namespace Graphics
         return _textures[name];
     }
 
+    const string& Model::GetName() const
+    {
+        return _name;
+    }
 }

@@ -12,7 +12,7 @@ namespace Graphics
     private:
         unsigned int _textureID;
 
-        SDL_Surface* _image;
+        SDL_Surface* _image{};
 
         int _width;
         int _height;
@@ -21,6 +21,7 @@ namespace Graphics
         Texture();
 
         ~Texture();
+
 
         void Load(const std::string& fileName);
 
@@ -32,10 +33,16 @@ namespace Graphics
         void Enable(int number);
 
 
-        int GetWidth() const;
-
         int GetHeight() const;
 
+        unsigned int GetTextureID();
+
+        int GetWidth() const;
+
+
+        void CreateForRendering(int width, int height, unsigned int format);
+
+        void CreateFromSurace(SDL_Surface* surface);
     };
 }
 

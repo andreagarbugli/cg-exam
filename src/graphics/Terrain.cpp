@@ -132,97 +132,26 @@ namespace Graphics
         }
     }
 
-    void Terrain::Draw()
+    void Terrain::Draw(BasicShader* shader)
     {
-        glm::mat4 model = glm::mat4(1.0f);
-
-        model = glm::translate(model, glm::vec3(_x, 0, _z));
-
-        _shader->Enable();
-
-        auto camera = _game->GetCurrentCamera();
-        auto projection = _game->GetProjection();
-
-        _shader->SetUniformMatrix4("model", model);
-        _shader->SetUniformMatrix4("view", camera->GetViewMatrix());
-        _shader->SetUniformMatrix4("projection", projection);
-
-        auto color = glm::vec4(1.0f);
-        _shader->SetUniformVector4("objectColor", color);
-
-        _shader->SetUniformVector3("viewPos", camera->GetPosition());
+        glm::mat4 modelMatrix = glm::mat4(1.0f);
+        modelMatrix = glm::translate(modelMatrix, glm::vec3(_x, 0, _z));
 
         _back->Enable(0);
         _rock->Enable(1);
         _street->Enable(2);
         _blendMap->Enable(3);
-
         _specular->Enable(4);
 
-        _shader->SetUniformInt("terrain.back", 0);
-        _shader->SetUniformInt("terrain.rock", 1);
-        _shader->SetUniformInt("terrain.street", 2);
-        _shader->SetUniformInt("terrain.blendMap", 3);
-        _shader->SetUniformInt("terrain.specular", 4);
+        shader->Use();
 
-        float shininess = 64.0;
-        _shader->SetUniformFloat("terrain.shininess", shininess);
-
-        // dir light
-        auto directionalLight = _game->GetDirectionalLight();
-
-        _shader->SetUniformVector3("dirLight.ambient", directionalLight->ambient);
-        _shader->SetUniformVector3("dirLight.diffuse", directionalLight->diffuse);
-        _shader->SetUniformVector3("dirLight.specular", directionalLight->specular);
-        _shader->SetUniformVector3("dirLight.direction", directionalLight->direction);
-
-        for (int i = 0; i < _game->GetPointLight().size(); i++)
-        {
-            auto pointLight = _game->GetPointLight()[i];
-
-            _shader->SetUniformVector3("pointLigths[0].position", pointLight->position);
-
-            _shader->SetUniformVector3("pointLigths[0].ambient", pointLight->ambient);
-            _shader->SetUniformVector3("pointLigths[0].diffuse", pointLight->diffuse);
-            _shader->SetUniformVector3("pointLigths[0].specular", pointLight->specular);
-
-            _shader->SetUniformFloat("pointLigths[0].constant", pointLight->constant);
-            _shader->SetUniformFloat("pointLigths[0].linear", pointLight->linear);
-            _shader->SetUniformFloat("pointLigths[0].quadratic", pointLight->quadratic);
-        }
+        shader->SetModelMatrix(modelMatrix);
 
         _mesh->Use();
     }
 
-    float Terrain::GetTerrainHeightAt(float worldX, float worldZ)
-    {
-        float terrainX = worldX - _x;
-        float terrainZ = worldZ - _z;
-        float gridSquareSize = SIZE / (float) _vertexCount - 1;
-
-        int gridX = (int) floor(terrainX / gridSquareSize);
-        int gridZ = (int) floor(terrainZ / gridSquareSize);
-
-        if (gridX >= _vertexCount - 1 || gridZ >= _vertexCount - 1 ||
-            gridX < 0 || gridZ < 0)
-        {
-            return 0.0f;
-        }
-
-        //float xCoord = (terrainX % gridSquareSize) / gridSquareSize;
-
-        return terrainHeights[gridX * _vertexCount + gridZ];
-    }
-
-    void Terrain::SetShader(GLSLShader* shader)
+    void Terrain::SetShader(BasicShader* shader)
     {
         _shader = shader;
     }
-
-
-//    void Terrain::SetTexture(Texture* texture)
-//    {
-//        _texture = texture;
-//    }
-
 }

@@ -1,8 +1,4 @@
-#include <iostream>
-
 #include "InputManager.hpp"
-#include "Game.hpp"
-#include "GlobalStateManager.hpp"
 
 namespace Engine
 {
@@ -35,25 +31,26 @@ namespace Engine
         {
             switch (event.type)
             {
-                case SDL_QUIT:
-                    _quit = true;
+                case SDL_QUIT:_quit = true;
                     break;
 
-                case SDL_TEXTINPUT:
-                    // WHAT
-                    break;
+                case SDL_TEXTINPUT:break;
 
                 case SDL_KEYDOWN:
                 {
                     _keyboard = SDL_GetKeyboardState(nullptr);
-                    auto index = event.key.keysym.scancode;
+                    auto index = event.key
+                                      .keysym
+                                      .scancode;
                     _keyDown[index] = true;
                     break;
                 }
                 case SDL_KEYUP:
                 {
                     _keyboard = SDL_GetKeyboardState(nullptr);
-                    auto index = event.key.keysym.scancode;
+                    auto index = event.key
+                                      .keysym
+                                      .scancode;
                     _keyUp[index] = true;
                     break;
                 }
@@ -61,34 +58,38 @@ namespace Engine
                 {
                     moving = true;
 
-                    _xChange = event.motion.xrel;
-                    _yChange = -event.motion.yrel;
+                    _xChange = event.motion
+                                    .xrel;
+                    _yChange = -event.motion
+                                     .yrel;
 
                     _lastX = _mouseX;
                     _lastY = _mouseY;
                     break;
                 }
-                case SDL_MOUSEBUTTONDOWN:
-                    _mouse = SDL_GetMouseState(&(_mouseX), &(_mouseY));
+                case SDL_MOUSEBUTTONDOWN:_mouse = SDL_GetMouseState(&(_mouseX), &(_mouseY));
 
-                    if (event.button.button == SDL_BUTTON_LEFT)
+                    if (event.button
+                             .button == SDL_BUTTON_LEFT)
                     {
                         _mouseDownButtons[MouseButton::MOUSE_LEFT] = true;
                     }
-                    else if (event.button.button == SDL_BUTTON_RIGHT)
+                    else if (event.button
+                                  .button == SDL_BUTTON_RIGHT)
                     {
                         _mouseDownButtons[MouseButton::MOUSE_RIGHT] = true;
                     }
                     break;
 
-                case SDL_MOUSEBUTTONUP:
-                    _mouse = SDL_GetMouseState(&(_mouseX), &(_mouseY));
+                case SDL_MOUSEBUTTONUP:_mouse = SDL_GetMouseState(&(_mouseX), &(_mouseY));
 
-                    if (event.button.button == SDL_BUTTON_LEFT)
+                    if (event.button
+                             .button == SDL_BUTTON_LEFT)
                     {
                         _mouseUpButtons[MouseButton::MOUSE_LEFT] = true;
                     }
-                    else if (event.button.button == SDL_BUTTON_RIGHT)
+                    else if (event.button
+                                  .button == SDL_BUTTON_RIGHT)
                     {
                         _mouseUpButtons[MouseButton::MOUSE_RIGHT] = true;
                     }
@@ -105,8 +106,7 @@ namespace Engine
                     // // If positive, scrolled up
                     break;
 
-                default:
-                    break;
+                default:break;
             }
         }
 
@@ -120,10 +120,14 @@ namespace Engine
     bool InputManager::IsKeyDown(KeyboardKey key)
     {
         if (_locked)
+        {
             return false;
+        }
 
         if (key < 0 || key >= KEYBOARD_SIZE)
+        {
             return false;
+        }
 
         return (_keyDown[key]);
     }
@@ -131,10 +135,14 @@ namespace Engine
     bool InputManager::IsKeyUp(KeyboardKey key)
     {
         if (_locked)
+        {
             return false;
+        }
 
         if (key < 0 || key >= KEYBOARD_SIZE)
+        {
             return false;
+        }
 
         return (_keyUp[key]);
     }
@@ -142,15 +150,21 @@ namespace Engine
     bool InputManager::IsKeyPressed(KeyboardKey key)
     {
         if (_locked)
+        {
             return false;
+        }
 
         if (!(_keyboard))
+        {
             return false;
+        }
 
         int SDLKey = static_cast<int>(key);
 
         if (_keyboard[SDLKey])
+        {
             return true;
+        }
 
         return false;
     }
@@ -158,10 +172,14 @@ namespace Engine
     bool InputManager::IsMouseDown(MouseButton mouseButton)
     {
         if (_locked)
+        {
             return false;
+        }
 
         if (mouseButton == MOUSE_BUTTON_NUMBER)
+        {
             return false;
+        }
 
         return _mouseDownButtons[mouseButton];
     }
@@ -169,10 +187,14 @@ namespace Engine
     bool InputManager::IsMouseUp(MouseButton mouseButton)
     {
         if (_locked)
+        {
             return false;
+        }
 
         if (mouseButton == MOUSE_BUTTON_NUMBER)
+        {
             return false;
+        }
 
         return _mouseUpButtons[mouseButton];
     }
@@ -180,27 +202,34 @@ namespace Engine
     bool InputManager::IsMousePressed(MouseButton mouseButton)
     {
         if (_locked)
+        {
             return false;
+        }
 
         switch (mouseButton)
         {
             case MOUSE_LEFT:
                 if (_mouse & SDL_BUTTON(1))
+                {
                     return true;
+                }
                 break;
 
             case MOUSE_MIDDLE:
                 if (_mouse & SDL_BUTTON(2))
+                {
                     return true;
+                }
                 break;
 
             case MOUSE_RIGHT:
                 if (_mouse & SDL_BUTTON(3))
+                {
                     return true;
+                }
                 break;
 
-            default:
-                break;
+            default:break;
         }
 
         return false;

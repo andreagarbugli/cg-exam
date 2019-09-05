@@ -10,12 +10,13 @@ namespace Utils
     ObjFileLoader::ObjFileLoader() :
             _hasNormals{ false },
             _isIndexed{ false },
-            _numberObjs{ 0 }
+            _currentObjIndex{ 0 },
+            _numberObjs{ 0 },
+            _numberMaterials{ 0 }
     {
-
     }
 
-    bool ObjFileLoader::LoadObj(string fileName, bool indexed)
+    bool ObjFileLoader::LoadObj(const string& fileName, bool indexed)
     {
         _isIndexed = indexed;
 
@@ -25,15 +26,10 @@ namespace Utils
             return false;
         }
 
-        if (!_mtlFileName.empty())
-        {
-            _ReadMtlFile();
-        }
-
         return true;
     }
 
-    bool ObjFileLoader::_ReadObjFile(std::string fileName)
+    bool ObjFileLoader::_ReadObjFile(const std::string& fileName)
     {
         ifstream fileStream(fileName, ios::in);
 
@@ -73,13 +69,16 @@ namespace Utils
                 _AddFaceElement(params);
 
             if (lineType == "o")
-                _AddObject(params);
+                _AddObject(params[1]);
 
-//            if (lineType == "usemtl")
-//                _UseNewMaterial(params);
+            if (lineType == "usemtl")
+                _UseNewMaterial(params[1]);
 
             if (lineType == "mtllib")
+            {
                 _mtlFileName = params[1];
+                _ReadMtlFile();
+            }
         }
 
         _CompleteRawMesh();
@@ -89,7 +88,7 @@ namespace Utils
         return true;
     }
 
-    vector<string> ObjFileLoader::_SplitLine(string str, string delim)
+    vector<string> ObjFileLoader::_SplitLine(const string& str, const string& delim)
     {
         vector<string> tokens;
         size_t prev = 0, pos = 0;
@@ -162,7 +161,7 @@ namespace Utils
         // f v1//vn1 v2//vn2 v3//vn3
         if (params[1].find("//", prev) != string::npos)
         {
-            for (int i = 1; i < params.size(); ++i)
+            for (std::size_t i = 1; i < params.size(); ++i)
             {
                 vector<string> faceParams = _SplitLine(params[i], "//");
 
@@ -176,12 +175,12 @@ namespace Utils
                 _normalIndices.push_back(normalIndex);
             }
         }
-            // Vertex normal indices: f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
-            //  or
-            // Vertex texture coordinate indices: f v1/vt1 v2/vt2 v3/vt3
+        // Vertex normal indices: f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+        //  or
+        // Vertex texture coordinate indices: f v1/vt1 v2/vt2 v3/vt3
         else if (params[1].find('/', prev) != string::npos)
         {
-            for (int i = 1; i < params.size(); ++i)
+            for (std::size_t i = 1; i < params.size(); ++i)
             {
                 vector<string> vertexParams = _SplitLine(params[i], "/");
 
@@ -206,7 +205,7 @@ namespace Utils
             }
 
         }
-            // Vertex indices: f v1 v2 v3
+        // Vertex indices: f v1 v2 v3
         else
         {
             for (int i = 0; i < 3; ++i)
@@ -220,7 +219,7 @@ namespace Utils
     }
 
 
-    void ObjFileLoader::_AddObject(std::vector<std::string> params)
+    void ObjFileLoader::_AddObject(string& objectName)
     {
         if (_numberObjs > 0)
         {
@@ -228,13 +227,14 @@ namespace Utils
         }
 
         auto mesh = new RawMesh();
-        mesh->name = params[1];
+        mesh->name = objectName;
         _meshes.push_back(mesh);
 
+        _currentObjIndex = _numberObjs;
         _numberObjs++;
     }
 
-    void ObjFileLoader::_CompleteRawMesh()
+    void ObjFileLoader::_CompleteRawMesh(bool isSubMesh)
     {
         auto completeMesh = _meshes[_numberObjs - 1];
 
@@ -247,24 +247,34 @@ namespace Utils
             _GetRawMesh(*completeMesh);
         }
 
-        Clear();
-    }
-
-    void ObjFileLoader::_ReadMtlFile()
-    {
-
+        _vertexIndices.clear();
+        _uvIndices.clear();
+        _normalIndices.clear();
     }
 
     void ObjFileLoader::_GetRawMesh(RawMesh& mesh)
     {
-        for (int i = 0; i < _vertexIndices.size(); ++i)
+        for (std::size_t i = 0; i < _vertexIndices.size(); ++i)
         {
             auto vertexIndex = _vertexIndices[i];
-            auto uvIndex = _uvIndices[i];
+
+            unsigned int uvIndex;
+            if (!_uvIndices.empty())
+                uvIndex = _uvIndices[i];
+            else
+                uvIndex = 0;
+
             auto normalIndex = _normalIndices[i];
 
+
             auto vertex = _vertices[vertexIndex - 1];
-            auto uv = _uvs[uvIndex - 1];
+
+            glm::vec2 uv;
+            if (!_uvs.empty())
+                uv = _uvs[uvIndex - 1];
+            else
+                uv = glm::vec2(0);
+
             auto normal = _normals[normalIndex - 1];
 
             mesh.vertices.push_back(vertex);
@@ -280,7 +290,7 @@ namespace Utils
 
         std::map<Vertex, unsigned int> vertexToIndex;
 
-        for (int j = 0; j < tmp->vertices.size(); ++j)
+        for (std::size_t j = 0; j < tmp->vertices.size(); ++j)
         {
             Vertex packed = {
                     tmp->vertices[j],
@@ -325,16 +335,136 @@ namespace Utils
         }
     }
 
+    void ObjFileLoader::_UseNewMaterial(string& materialName)
+    {
+        auto mesh = _meshes[_currentObjIndex];
+
+        if (mesh->materialName.empty())
+        {
+            mesh->materialName = materialName;
+        }
+        else
+        {
+            if (_numberObjs > 0)
+            {
+                _CompleteRawMesh(true);
+            }
+
+            auto subMesh = new RawMesh();
+            subMesh->name = mesh->name + "_" + materialName;
+            subMesh->materialName = materialName;
+            _meshes.push_back(subMesh);
+            _numberObjs++;
+        }
+    }
+
+    bool ObjFileLoader::_ReadMtlFile()
+    {
+        ifstream fileStream(_mtlFileName, ios::in);
+
+        if (!fileStream.is_open())
+        {
+            cerr << "Failed to open the mtl file: " << _mtlFileName << endl;
+            return false;
+        }
+
+        string firstLineWord;
+        string line;
+
+        while (!fileStream.eof())
+        {
+            getline(fileStream, line);
+
+            vector<string> params = _SplitLine(line, " ");
+
+            if (params.empty())
+                continue;
+
+            string lineType = params[0];
+
+            Material* material;
+
+            if (lineType == "#")
+                continue;
+
+            if (lineType == "newmtl")
+            {
+                material = new Material();
+                material->name = params[1];
+                _materials.push_back(material);
+                _numberMaterials++;
+            }
+            else
+            {
+                material = _materials[_numberMaterials - 1];
+            }
+
+            if (lineType == "Ns")
+            {
+                material->ns = stof(params[1]);
+            }
+
+            if (lineType == "Ka")
+            {
+                auto color = _ParseMaterialColor(params);
+                material->ka = color;
+            }
+
+            if (lineType == "Kd")
+            {
+                auto color = _ParseMaterialColor(params);
+                material->kd = color;
+            }
+
+            if (lineType == "Ks")
+            {
+                auto color = _ParseMaterialColor(params);
+                material->ks = color;
+            }
+
+            if (lineType == "d")
+            {
+                material->d = stof(params[1]);
+            }
+
+            if (lineType == "illum")
+            {
+                material->illum = stoi(params[1]);
+            }
+
+            if (lineType == "map_Kd")
+            {
+                material->mapKd = params[1];
+            }
+
+            if (lineType == "map_Ks")
+            {
+                material->mapKs = params[1];
+            }
+        }
+
+        fileStream.close();
+
+        return true;
+    }
+
+    glm::vec3 ObjFileLoader::_ParseMaterialColor(std::vector<std::string> params)
+    {
+        float r = std::stof(params[1]);
+        float g = std::stof(params[2]);
+        float b = std::stof(params[3]);
+
+        return { r, g, b };
+    }
+
     std::vector<RawMesh*> ObjFileLoader::GetMeshes()
     {
         return _meshes;
     }
 
-    void ObjFileLoader::Clear()
+    std::vector<Material*> ObjFileLoader::GetMaterials()
     {
-        _vertexIndices.clear();
-        _uvIndices.clear();
-        _normalIndices.clear();
+        return _materials;
     }
 
 }

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Modulo Core dell&#39;Engine | Progetto Fondamenti di Computer Grafica</title>
+    <meta name="description" content="Just playing around">
+    
+    
+    <link rel="preload" href="/docs/assets/css/0.styles.160cdcc3.css" as="style"><link rel="preload" href="/docs/assets/js/app.f0baf905.js" as="script"><link rel="preload" href="/docs/assets/js/2.83deb042.js" as="script"><link rel="preload" href="/docs/assets/js/7.8185734a.js" as="script"><link rel="prefetch" href="/docs/assets/js/10.d77f1660.js"><link rel="prefetch" href="/docs/assets/js/3.676b69f1.js"><link rel="prefetch" href="/docs/assets/js/4.cea1dc6d.js"><link rel="prefetch" href="/docs/assets/js/5.47a04f22.js"><link rel="prefetch" href="/docs/assets/js/6.4c5be0ae.js"><link rel="prefetch" href="/docs/assets/js/8.9dfec95c.js"><link rel="prefetch" href="/docs/assets/js/9.5582e851.js">
+    <link rel="stylesheet" href="/docs/assets/css/0.styles.160cdcc3.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/docs/" class="home-link router-link-active"><!----> <span class="site-name">Progetto Fondamenti di Computer Grafica</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/docs/" class="sidebar-link">Introduzione</a></li><li><a href="/docs/engine-core.html" class="active sidebar-link">Modulo Core dell'Engine</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/engine-core.html#inputmanager" class="sidebar-link">InputManager</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#window" class="sidebar-link">Window</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#gameobject" class="sidebar-link">GameObject</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/engine-core.html#camera" class="sidebar-link">Camera</a></li></ul></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#game" class="sidebar-link">Game</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-init" class="sidebar-link">Metodo Init()</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-startup" class="sidebar-link">Metodo StartUp()</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-processinput" class="sidebar-link">Metodo ProcessInput()</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-update" class="sidebar-link">Metodo Update()</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-render" class="sidebar-link">Metodo Render()</a></li><li class="sidebar-sub-header"><a href="/docs/engine-core.html#metodo-shutdown" class="sidebar-link">Metodo ShutDown()</a></li></ul></li></ul></li><li><a href="/docs/graphics.html" class="sidebar-link">Moduli per la grafica</a></li><li><a href="/docs/game.html" class="sidebar-link">Game</a></li><li><a href="/docs/utils.html" class="sidebar-link">Modulo di Utility</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="modulo-core-dell-engine"><a href="#modulo-core-dell-engine" aria-hidden="true" class="header-anchor">#</a> Modulo Core dell'Engine</h1> <p>In questo capitolo discuteremo delle classi che compongono il nucleo dell'engine di gioco.</p> <h2 id="inputmanager"><a href="#inputmanager" aria-hidden="true" class="header-anchor">#</a> <code>InputManager</code></h2> <p>La prima classe che analizzeremo sarà quella che permette la gestione degli input, ovvero:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">InputManager</span>
+<span class="token punctuation">{</span>
+  <span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token keyword">static</span> InputManager <span class="token operator">*</span><span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">static</span> <span class="token keyword">auto</span> <span class="token operator">*</span>_instance <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token function">InputManager</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> _instance<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">void</span> <span class="token function">Init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsKeyDown</span><span class="token punctuation">(</span>KeyboardKey key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsKeyUp</span><span class="token punctuation">(</span>KeyboardKey key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsKeyPressed</span><span class="token punctuation">(</span>KeyboardKey key<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsMouseDown</span><span class="token punctuation">(</span>MouseButton mouseButton<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsMouseUp</span><span class="token punctuation">(</span>MouseButton mouseButton<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">IsMousePressed</span><span class="token punctuation">(</span>MouseButton mouseButton<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Come è possibile vedere dal pezzo di codice, dove per semplicità sono stati omessi i campi privati e parte dei metodi, la classe <code>InputManager</code> è stata sviluppata come <em>Singleton</em>, in questo modo è possibile referenziare una singola instanza di questa classe in tutto il sistema. Per ottenere l'istanza occorre effettuare una chiamata al metodo statico <code>GetInstance()</code>.</p> <p>Il metodo più importante della classe è sicuramente il metodo <code>Update</code> (anche in questo caso ne mostreremo solamente una piccola parte).</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> InputManager<span class="token operator">::</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token function">SDL_PollEvent</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>event<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token keyword">switch</span> <span class="token punctuation">(</span>event<span class="token punctuation">.</span>type<span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token keyword">case</span> SDL_QUIT<span class="token operator">:</span>
+                _quit <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">case</span> SDL_TEXTINPUT<span class="token operator">:</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">case</span> SDL_KEYDOWN<span class="token operator">:</span>
+            <span class="token punctuation">{</span>
+                _keyboard <span class="token operator">=</span> <span class="token function">SDL_GetKeyboardState</span><span class="token punctuation">(</span><span class="token keyword">nullptr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">auto</span> index <span class="token operator">=</span> event<span class="token punctuation">.</span>key<span class="token punctuation">.</span>keysym<span class="token punctuation">.</span>scancode<span class="token punctuation">;</span>
+                _keyDown<span class="token punctuation">[</span>index<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+                <span class="token keyword">break</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Questo metodo aggiorna lo stato relativo a tutti gli input, sia del mouse che della tastiera, in modo da poter essere utilizzato successivamente dalle classi di gioco che posseggono il riferimento all'istanza della classe <code>InputManager</code>.</p> <p>Insieme alla classe per la gestione degli input è stato sviluppato anche un file header chiamato <code>InputDefinitions.h</code>. All'interno di questo file possiamo trovare gli enumerativi che fanno da wrapper per tutti gli input gestiti da SDL2. Questa classe rende più semplice l'utilizzo degli input all'interno delle altre classi di progetto, oltre a facilitare un eventuale passaggio ad un'altra libreria per la gestione degli input.</p> <h2 id="window"><a href="#window" aria-hidden="true" class="header-anchor">#</a> <code>Window</code></h2> <p>La classe <code>Window</code> è un piccolo wrapper che incorpora una finestra creata dalla libreria SDL2. Come nel caso precedente, oltre a permette un più facile utilizzo delle finestra di gioco, fornisce anche una maggiore astrazione nel caso si voglia cambiare libreria.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">Window</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+    SDL_Window<span class="token operator">*</span> _sdlWindow<span class="token punctuation">;</span>
+    SDL_GLContext _glContext<span class="token punctuation">;</span>
+
+    <span class="token keyword">int</span> _width<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> _height<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">Window</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">static</span> Window<span class="token operator">*</span> <span class="token function">CreateWindow</span><span class="token punctuation">(</span>std<span class="token operator">::</span>string name<span class="token punctuation">,</span> <span class="token keyword">int</span> width<span class="token punctuation">,</span> <span class="token keyword">int</span> height<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">SwapBuffers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">Close</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">Clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h2 id="gameobject"><a href="#gameobject" aria-hidden="true" class="header-anchor">#</a> <code>GameObject</code></h2> <p>Di seguito abbiamo una delle classi più importanti dell'engine, in quanto si tratta della classe che rappresenta ogni singolo oggetto della scena di gioco. Questa classe fa da base per tutte le classi presenti nella cartella <code>game</code>. Tali classsi verranno discusse nel capitolo sul <a href="/game">gioco</a></p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">GameObject</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">protected</span><span class="token operator">:</span>
+    GameObjectState _state<span class="token punctuation">;</span>
+
+    glm<span class="token operator">::</span>vec3 _scale<span class="token punctuation">;</span>
+    glm<span class="token operator">::</span>vec3 _rotation<span class="token punctuation">;</span>
+    glm<span class="token operator">::</span>vec3 _position<span class="token punctuation">;</span>
+
+    <span class="token keyword">class</span> <span class="token class-name">Game</span><span class="token operator">*</span> _game<span class="token punctuation">;</span>
+
+    glm<span class="token operator">::</span>mat4 _modelMatrix<span class="token punctuation">;</span>
+
+    InputManager<span class="token operator">*</span> _inputManager <span class="token operator">=</span> InputManager<span class="token operator">::</span><span class="token function">GetInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">GameObject</span><span class="token punctuation">(</span><span class="token keyword">class</span> <span class="token class-name">Game</span><span class="token operator">*</span> game<span class="token punctuation">,</span> std<span class="token operator">::</span>string name<span class="token punctuation">,</span>
+                glm<span class="token operator">::</span>vec3 position <span class="token operator">=</span> glm<span class="token operator">::</span><span class="token function">vec3</span><span class="token punctuation">(</span><span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                glm<span class="token operator">::</span>vec3 scale <span class="token operator">=</span> glm<span class="token operator">::</span><span class="token function">vec3</span><span class="token punctuation">(</span><span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                glm<span class="token operator">::</span>vec3 rotation <span class="token operator">=</span> glm<span class="token operator">::</span><span class="token function">vec3</span><span class="token punctuation">(</span><span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">,</span> <span class="token number">0.0f</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">:</span>
+            _game<span class="token punctuation">{</span>game<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _name<span class="token punctuation">{</span>std<span class="token operator">::</span><span class="token function">move</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _position<span class="token punctuation">{</span>position<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _scale<span class="token punctuation">{</span>scale<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _rotation<span class="token punctuation">{</span>rotation<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _state<span class="token punctuation">{</span>GameObjectState<span class="token operator">::</span>Created<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _rotationAngle<span class="token punctuation">{</span><span class="token number">0</span><span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Come possiamo vedere questa classe presenta tutti i parametri per definire la posizione, scala e rotazione di un oggetto in scena. In questo modo tutte le classi che deriveranno da questa non dovranno specificare nessuno di questi campi, ma semplicemente implemetare la logica di aggiornamento degli stessi attraverso la ridefinizione della funzione <code>Update()</code>.</p> <p>Opzionalmente la classe può avere anche un riferimento ad un modello (classe <a href="/graphics#model">Model</a>), ovvero l'oggetto che deve essere disegnato a schermo. Questo campo è opzionale perchè come vedremo nella prossima sezione, nonstante la classe <code>BasicCamera</code> derivi da <code>GameObject</code>, non ha bisogno di nessun modello ad essa associtao, in quanto solitamente oggetti di scena come la camera non vengono disegnati.</p> <h3 id="camera"><a href="#camera" aria-hidden="true" class="header-anchor">#</a> <code>Camera</code></h3> <p>La classe <code>BasicCamera</code> è la prima che vediamo che estende <code>GameObject</code>. Questa classe farà a sua volta da base per due diversi tipi di camera implementati all'interno del gioco. I suoi aspeti più importanti sono:</p> <ul><li>la funzione <code>GetViewMatrix()</code> che permette di ottenere la matrice per applicare la trasformazione di vista agli oggetti della scena.</li> <li>la funzione <code>Update()</code>, ovvero una funzione la quale ricalcola ogni volta la matrice per la trasformazione di vista, e che prima di fare questo richiama una funzione virtuale, chiamata <code>_UpdatePosition()</code>, che può essere implementata dalle classi che estendono <code>BasicCamera</code>, in modo da gestire la posizione delle camere nel modo più apportuno al tipo di movimento che si vuole creare.</li></ul> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> BasicCamera<span class="token operator">::</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token keyword">double</span> deltaTime<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token function">_UpdatePosition</span><span class="token punctuation">(</span>deltaTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    _viewMatrix <span class="token operator">=</span> <span class="token function">_CalculateViewMatrix</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><ul><li><p><code>Camera</code> Questa prima versione permette il movimento della vista attraverso la tastiera ed il muose, possiamo quindi parlare di <em>Free Camera</em>. Ogni volta che viene aggiornato l'intero gioco nel loop principale che vedremo fra poco, viene aggiornata anche la posizione della camera in base agli input del giocatore e di conseguenza deve essere ricalcolata la matrice per la trasformazione di vista.</p></li> <li><p><code>FollowCamera</code> Il secondo tipo di camera implementato è un tipo di camera che segue un determinato <code>GameObject</code>. In questo caso la classe si tiene salvato il riferimento ad un oggetto della scena e si muove in modo relativo al movimento quest'ultimo.</p></li></ul> <h2 id="game"><a href="#game" aria-hidden="true" class="header-anchor">#</a> <code>Game</code></h2> <p>Parleremo ora della classe principale di tutto il progetto, ma prima di fare ciò mostreremo il <code>main</code> del progetto, ovvero il file dove questa viene utilizzata:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token macro property">#<span class="token directive keyword">include</span> <span class="token string">&quot;engine/Game.hpp&quot;</span></span>
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token keyword">const</span> <span class="token operator">*</span>argv<span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">auto</span> <span class="token operator">*</span>p <span class="token operator">=</span> <span class="token keyword">new</span> Engine<span class="token operator">::</span><span class="token function">Game</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    p<span class="token operator">-&gt;</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Esatto il <code>main</code> del progetto si compone solamente di queste righe di codice. Ora spiegheremo passo per passo perchè il <code>main</code> è così semplice e quali sono le operazioni che compie la funzione <code>Run()</code> della classe <code>Game</code>.</p> <p>Una versione semplificata di tale funzione può essere espressa come:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> Game<span class="token operator">::</span><span class="token function">Run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">Init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        _globalStateManager<span class="token operator">-&gt;</span><span class="token function">Start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token function">StartUp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">// game loop</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>_globalStateManager<span class="token operator">-&gt;</span><span class="token function">IsRunning</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">{</span>
+            <span class="token function">ProcessInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+            <span class="token function">Render</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        <span class="token function">ShutDown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>In questi pochi passi possiamo vedere tutto quello che viene fatto durante l'esecuzione del gioco.</p> <h3 id="metodo-init"><a href="#metodo-init" aria-hidden="true" class="header-anchor">#</a> Metodo <code>Init()</code></h3> <p>Metodo attraverso il quale vengono inizializzati tutti i sottosistemi che servono all'applicazione per funzionare, come ad esempio:</p> <ul><li>Inizializzazione di SDL_Video, SDL_Image, SDL_TTF.</li> <li>Vengono settati tutti gli attributi di OpenGL.</li> <li>Inizializzato gl3w per utilizzare il profilo core di OpenGL.</li></ul> <p>Dopodichè viene settato lo stato globale come in esecuzione.</p> <h3 id="metodo-startup"><a href="#metodo-startup" aria-hidden="true" class="header-anchor">#</a> Metodo <code>StartUp()</code></h3> <p>A questo punto vengono caricati tutti i modelli, le texture, luci ed elementi che compongono la scena di gioco.</p> <p>Da questo momento, fino a quando non viene settato lo stato globale per la richiesta di chiusura del programma, entriamo nel <em>game loop</em>. Questo ciclo continuo viene interrotto solamente in caso di chiusura del gioco, e ad ogni iterazione compie i seguenti passi:</p> <ul><li>Controllo dei nuovi input da parte del giocatore.</li> <li>Aggiornamento di tutti gli oggetti che fanno parte del gioco.</li> <li>Render della scena e visualizzazione a schermo.</li></ul> <h3 id="metodo-processinput"><a href="#metodo-processinput" aria-hidden="true" class="header-anchor">#</a> Metodo <code>ProcessInput()</code></h3> <p>Viene aggiornato lo stato dell'<code>InputManager</code> e poi vengono gestiti alcuni degli di interesse per il gioco, come ad esempio la richiesta di chiusura.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> Game<span class="token operator">::</span><span class="token function">ProcessInput</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    _inputManager<span class="token operator">-&gt;</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>_inputManager<span class="token operator">-&gt;</span><span class="token function">QuitRequested</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">||</span>
+        _inputManager<span class="token operator">-&gt;</span><span class="token function">IsKeyDown</span><span class="token punctuation">(</span>KEY_ESCAPE<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        _globalStateManager<span class="token operator">-&gt;</span><span class="token function">Stop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="metodo-update"><a href="#metodo-update" aria-hidden="true" class="header-anchor">#</a> Metodo <code>Update()</code></h3> <p>Vengono aggiornati tutti i <code>GameObject</code> del gioco secondo la specifica implementazione del metodo <code>Update()</code> per ogni classe che estende la classe base <code>GameObject</code> appunto.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> Game<span class="token operator">::</span><span class="token function">Update</span><span class="token punctuation">(</span><span class="token keyword">double</span> elapsedTime<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    _updatingGameObjects <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">auto</span> gameObject <span class="token operator">:</span> _gameObjects<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        gameObject<span class="token operator">-&gt;</span><span class="token function">Update</span><span class="token punctuation">(</span>elapsedTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    _updatingGameObjects <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="metodo-render"><a href="#metodo-render" aria-hidden="true" class="header-anchor">#</a> Metodo <code>Render()</code></h3> <p>Il metodo che renderizza la scena finale è diviso a sua volta in diversi metodi:</p> <ul><li>Prima di tutto ridimensiona la viewport, dato che potrebbe essere stata modificata per generare altre scene (ad esempio per la generazione della minimappa nel nostro caso).</li> <li>Se la minimappa è attiva, allora prima di renderizzare la scena vera e propria viene renderizzata una sua copia da un punto di vista specifico, per poi utilizzare tale scena come texture da applicare alla mesh della minimappa.</li> <li>A questo punto viene renderizzata la scena finale.</li> <li>Infine viene renderizzata anche l'eventuale interfaccia grafica, direttamente sopra la scena 3D.</li></ul> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> Game<span class="token operator">::</span><span class="token function">Render</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token function">glViewport</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> WINDOW_WIDTH<span class="token punctuation">,</span> WINDOW_HEIGHT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">glClear</span><span class="token punctuation">(</span>GL_COLOR_BUFFER_BIT <span class="token operator">|</span> GL_DEPTH_BUFFER_BIT<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>_isMinimapActive<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">_RenderMinimap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">_RenderScene</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">_RenderGUI</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">glUseProgram</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><h3 id="metodo-shutdown"><a href="#metodo-shutdown" aria-hidden="true" class="header-anchor">#</a> Metodo <code>ShutDown()</code></h3> <p>Come facile intuire chiude la finestra ed il programma.</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/docs/" class="prev router-link-active">
+          Introduzione
+        </a></span> <span class="next"><a href="/docs/graphics.html">
+          Moduli per la grafica
+        </a>
+        →
+      </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/docs/assets/js/app.f0baf905.js" defer></script><script src="/docs/assets/js/2.83deb042.js" defer></script><script src="/docs/assets/js/7.8185734a.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Moduli per la grafica | Progetto Fondamenti di Computer Grafica</title>
+    <meta name="description" content="Just playing around">
+    
+    
+    <link rel="preload" href="/docs/assets/css/0.styles.160cdcc3.css" as="style"><link rel="preload" href="/docs/assets/js/app.f0baf905.js" as="script"><link rel="preload" href="/docs/assets/js/2.83deb042.js" as="script"><link rel="preload" href="/docs/assets/js/8.9dfec95c.js" as="script"><link rel="prefetch" href="/docs/assets/js/10.d77f1660.js"><link rel="prefetch" href="/docs/assets/js/3.676b69f1.js"><link rel="prefetch" href="/docs/assets/js/4.cea1dc6d.js"><link rel="prefetch" href="/docs/assets/js/5.47a04f22.js"><link rel="prefetch" href="/docs/assets/js/6.4c5be0ae.js"><link rel="prefetch" href="/docs/assets/js/7.8185734a.js"><link rel="prefetch" href="/docs/assets/js/9.5582e851.js">
+    <link rel="stylesheet" href="/docs/assets/css/0.styles.160cdcc3.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/docs/" class="home-link router-link-active"><!----> <span class="site-name">Progetto Fondamenti di Computer Grafica</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/docs/" class="sidebar-link">Introduzione</a></li><li><a href="/docs/engine-core.html" class="sidebar-link">Modulo Core dell'Engine</a></li><li><a href="/docs/graphics.html" class="active sidebar-link">Moduli per la grafica</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/graphics.html#classi-cartella-graphics" class="sidebar-link">Classi cartella graphics</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/graphics.html#mesh" class="sidebar-link">Mesh</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#model" class="sidebar-link">Model</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#texture" class="sidebar-link">Texture</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#light" class="sidebar-link">Light</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#terrain" class="sidebar-link">Terrain</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#skybox" class="sidebar-link">Skybox</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#shaderprogram" class="sidebar-link">ShaderProgram</a></li></ul></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#classi-cartella-shaders" class="sidebar-link">Classi cartella shaders</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/docs/graphics.html#basicshader" class="sidebar-link">BasicShader</a></li><li class="sidebar-sub-header"><a href="/docs/graphics.html#esampio-di-shader-glsl" class="sidebar-link">Esampio di shader GLSL</a></li></ul></li></ul></li><li><a href="/docs/game.html" class="sidebar-link">Game</a></li><li><a href="/docs/utils.html" class="sidebar-link">Modulo di Utility</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="moduli-per-la-grafica"><a href="#moduli-per-la-grafica" aria-hidden="true" class="header-anchor">#</a> Moduli per la grafica</h1> <p>In questo capitolo introdurremo uno dei moduli più importanti di tutto il progetto, ovvero <code>Graphics</code>. Questo modulo è stato diviso all'interno di due diverse cartelle (<code>graphics</code> e <code>shaders</code>) in quanto si tratta del modulo che contiene il numero maggiore di classi; per questo motivo cercheremo di descrivere ognuna di esse nel modo più veloce e chiaro possibile.</p> <h2 id="classi-cartella-graphics"><a href="#classi-cartella-graphics" aria-hidden="true" class="header-anchor">#</a> Classi cartella <code>graphics</code></h2> <h3 id="mesh"><a href="#mesh" aria-hidden="true" class="header-anchor">#</a> <code>Mesh</code></h3> <p>La classe <code>Mesh</code> ha come obbiettivo quello di rendere più semplice il lavoro su mesh utilizzando delle chiamate OpenGL.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">Mesh</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _verticesNumber<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _uvsNumber<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _normalsNumber<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _indicesNumber<span class="token punctuation">;</span>
+
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _vertexArrayObject<span class="token punctuation">;</span>
+
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _vertexBufferObject<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _uvBufferObject<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _normalBufferObject<span class="token punctuation">;</span>
+
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _indexBufferObject<span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> _hasIndices<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+
+    <span class="token keyword">explicit</span> <span class="token function">Mesh</span><span class="token punctuation">(</span>Utils<span class="token operator">::</span>RawMesh<span class="token operator">&amp;</span> model<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token operator">~</span><span class="token function">Mesh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">Use</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>Il costruttore della classe prende in ingresso una <code>RawMesh</code>, ovvero l'oggetto che viene costrutito per ognuno degli oggetti presenti all'interno di un file <code>.obj</code> in fase di caricamento (<a href="utils">ObjFileLoader</a>). Dopodiché costruisce un <em>Buffer Object</em> per ognuno dei seguenti elementi: vertici, coordinate texture e normali; ed in caso siano presenti, uno anche per gli indici. Gli indici servono per non ripetere più di una volta le coordinate di uno stesso vertice nel caso faccia parte di più di una faccia.</p> <p>Questi passaggi permettono di inviare i dati alla scheda video una volta sola, in questo modo possiamo richiedere direttamente i vertici che vogliamo disegnare di volta in volta solamente attivando l'<em>Array Object</em> ed i i <em>Buffer Object</em> associati alla mesh (metodo <code>Use()</code>), ma senza inviare nuovamente tutte le informazioni alla scheda video, essendo queste già presenti nella sua memoria. Questo permette di risparmiare motlo del tempo impiegato in operazioni di I/O.</p> <h3 id="model"><a href="#model" aria-hidden="true" class="header-anchor">#</a> <code>Model</code></h3> <p>La classe <code>Model</code> rappresenta appunto un modello, il quale può essere associato ad un <code>GameObject</code>. Come possiamo vedere si tratta di una classe la quale può fare riferimento anche a dei sottomodelli (ad esempio la macchina è composta dal corpo più le quattro ruote). Ma non solo, ad un modello sono associati anche:</p> <ul><li>Una lista di texture,</li> <li>Una lista di materiali,</li> <li>Lo shader da utilizzare per il modello.</li></ul> <p>Tutti elementi essenziali per la fase di rendering.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">struct</span> <span class="token class-name">SubModel</span>
+<span class="token punctuation">{</span>
+    Model<span class="token operator">*</span> parent<span class="token punctuation">;</span>
+    Mesh<span class="token operator">*</span> mesh<span class="token punctuation">;</span>
+    Utils<span class="token operator">::</span>Material<span class="token operator">*</span> material<span class="token punctuation">;</span>
+    <span class="token keyword">bool</span> hasTextures<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">class</span> <span class="token class-name">Model</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+
+    std<span class="token operator">::</span>map<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token punctuation">,</span> SubModel<span class="token operator">*</span><span class="token operator">&gt;</span> _meshes<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>map<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token punctuation">,</span> Texture<span class="token operator">*</span><span class="token operator">&gt;</span> _textures<span class="token punctuation">;</span>
+    std<span class="token operator">::</span>map<span class="token operator">&lt;</span>std<span class="token operator">::</span>string<span class="token punctuation">,</span> Utils<span class="token operator">::</span>Material<span class="token operator">*</span><span class="token operator">&gt;</span> _materials<span class="token punctuation">;</span>
+
+    BasicShader<span class="token operator">*</span> _shader<span class="token punctuation">;</span>
+
+    std<span class="token operator">::</span>string _name<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+
+    <span class="token keyword">static</span> <span class="token keyword">bool</span> sortByDrawingOrdin futuro <span class="token function">poer</span><span class="token punctuation">(</span>Model<span class="token operator">*</span> m1<span class="token punctuation">,</span> Model<span class="token operator">*</span> m2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token function">Model</span><span class="token punctuation">(</span>std<span class="token operator">::</span>string name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">Draw</span><span class="token punctuation">(</span>BasicShader<span class="token operator">*</span> shader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>Il metodo <code>Draw</code> è quello che viene chiamato, per ognuno degli oggetti che fanno parte della scena, all'interno del ciclo del metodo <code>Render()</code> della classe <a href="/docs/engine-core/#metodo-render">Game</a>.</p> <h3 id="texture"><a href="#texture" aria-hidden="true" class="header-anchor">#</a> <code>Texture</code></h3> <p>Come molte altre classi si occupa di incapsulare le funzioni OpenGL per lavorare con le Texture.</p> <p>La classe mette a disposizione un metodo <code>Load</code> che prende in ingresso il nome del file immagine. Dopodiché fa uso della libreria SDL2_Image e delle funzioni OpenGL per leggere il file e creare una texture.</p> <p>Fanno parte di questa classe anche due funzioni chiamate:</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">void</span> <span class="token function">CreateForRendering</span><span class="token punctuation">(</span><span class="token keyword">int</span> width<span class="token punctuation">,</span> <span class="token keyword">int</span> height<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> format<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">CreateFromSurace</span><span class="token punctuation">(</span>SDL_Surface<span class="token operator">*</span> surface<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre></div><p>La prima permette di creare una texture associata al <em>FrameBuffer</em>. In questo modo è possibile creare il contenuto della texture renderizzando la scena 3D (utilizzata nel caso della minimappa). La seconda crea una texture a partire da una <code>SDL_Surface</code>. Questa seconda funzione viene utilizza per creare texture da usare nell'interfaccia grafica.</p> <h3 id="light"><a href="#light" aria-hidden="true" class="header-anchor">#</a> <code>Light</code></h3> <p>Più che di una classe si tratta di file che contiene tre strutture per rappresentare i tre diversi tipi di luci che sono presenti nel gioco, ovvero:</p> <ul><li>Direzionale,</li> <li>Point Light,</li> <li>Spot Light.</li></ul> <p>Queste tre strutture permettono di salvare i dati da dover poi passare agli shader attraverso degli <code>uniform</code>, come vedremo alla fine di questo capitolo.</p> <h3 id="terrain"><a href="#terrain" aria-hidden="true" class="header-anchor">#</a> <code>Terrain</code></h3> <p>La classe <code>Terrain</code> è una delle classi che specializza <code>GameObject</code>. Nel nostro caso abbiamo deciso di utilizzare il metodo delle blend map per applicare diverse texture allo stesso terreno, in modo da differenziarlo un pochino. Per questo motivo, nel costruttore, vengono caricate cinque diverse texture. Le prime quattro hanno i seguenti compiti:</p> <ul><li>le prime tre sono le texture vere e proprie da applicare al terreno,</li> <li>la quarta è la blend map vera e propria, ovvero una texture che viene utilizzata per mischiare le altre tre in base ai valori <code>red</code>, <code>green</code> e <code>blue</code> per ognuno dei pixel.</li></ul> <p>La quinta texture è semplicemente una texture nera che verrà utilizzata come specular map.</p> <p>Ad un certo punto dello sviluppo abbiamo implementato anche un metodo per generare diverse altezze per il terreno, metodo delle height map. La funzione che permette di generare questo effetto è ancora presente nel codice, ma è stato scelto di non usarlo nel gioco finale, in quanto si sarebbe dovuto implementare anche un meccanismo per disegnare gli altri oggetti della scena in una posizione consona all'altezza del terreno.</p> <h3 id="skybox"><a href="#skybox" aria-hidden="true" class="header-anchor">#</a> <code>Skybox</code></h3> <p>La classe <code>Skybox</code> viene usata per disegnare un ambiente fittizio intorno alla scena.</p> <p>Nel costruttore di questa classe vengono creati uno <code>ShaderProgram</code> apposito ed un <code>CubeMap</code>, ovvero un cubo sul quale vengono applicate sei diverse texture.</p> <p>Questo cubo viene poi disegnato intorno alla scena 3D di gioco in modo da dare l'impressione di trovarsi all'interno di un ambiente reale.</p> <h3 id="shaderprogram"><a href="#shaderprogram" aria-hidden="true" class="header-anchor">#</a> <code>ShaderProgram</code></h3> <p>Si tratta della classe che si occupa della creazione di un shader program di OpenGL. Attualmente permette di caricare e compilare solamente due tipi di shader, ovvero <em>vertex</em> e <em>fragment shader</em>.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code> <span class="token keyword">class</span> <span class="token class-name">ShaderProgram</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _vertexShader<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _fragShader<span class="token punctuation">;</span>
+    <span class="token keyword">unsigned</span> <span class="token keyword">int</span> _shaderProgram<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">ShaderProgram</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token keyword">default</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> <span class="token function">Load</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> vertName<span class="token punctuation">,</span> <span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> fragName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+
+<span class="token keyword">private</span><span class="token operator">:</span>
+    <span class="token keyword">bool</span> <span class="token function">_CompileShader</span><span class="token punctuation">(</span><span class="token keyword">const</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> fileName<span class="token punctuation">,</span>
+                        GLenum shaderType<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token operator">&amp;</span> shader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Oltre a rendere più semplice le fasi di creazione di uno shader program, mette a disposizione anche alcune funzioni per settare i valori delle variabili <code>uniform</code> presenti nel programma.</p> <h2 id="classi-cartella-shaders"><a href="#classi-cartella-shaders" aria-hidden="true" class="header-anchor">#</a> Classi cartella <code>shaders</code></h2> <h3 id="basicshader"><a href="#basicshader" aria-hidden="true" class="header-anchor">#</a> <code>BasicShader</code></h3> <p>Questa classe può essere utilizzata come base per la creazione di altre classi che rappresentano degli shader specifici.</p> <div class="language-cpp extra-class"><pre class="language-cpp"><code><span class="token keyword">class</span> <span class="token class-name">BasicShader</span>
+<span class="token punctuation">{</span>
+<span class="token keyword">protected</span><span class="token operator">:</span>
+    ShaderProgram<span class="token operator">*</span> _shaderProgram<span class="token punctuation">;</span>
+
+    std<span class="token operator">::</span>string _name<span class="token punctuation">;</span>
+
+    Engine<span class="token operator">::</span>Game<span class="token operator">*</span> _game<span class="token punctuation">;</span>
+
+<span class="token keyword">public</span><span class="token operator">:</span>
+    <span class="token function">BasicShader</span><span class="token punctuation">(</span>Engine<span class="token operator">::</span>Game<span class="token operator">*</span> game<span class="token punctuation">,</span> std<span class="token operator">::</span>string<span class="token operator">&amp;</span> name<span class="token punctuation">)</span> <span class="token operator">:</span>
+            _game<span class="token punctuation">{</span>game<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _name<span class="token punctuation">{</span>name<span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token function">BasicShader</span><span class="token punctuation">(</span>Engine<span class="token operator">::</span>Game<span class="token operator">*</span> game<span class="token punctuation">,</span> ShaderProgram<span class="token operator">*</span> shaderProgram<span class="token punctuation">)</span> <span class="token operator">:</span>
+            _game<span class="token punctuation">{</span>game<span class="token punctuation">}</span><span class="token punctuation">,</span>
+            _shaderProgram<span class="token punctuation">{</span>shaderProgram<span class="token punctuation">}</span>
+    <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">Use</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">virtual</span> <span class="token keyword">void</span> <span class="token function">SetModel</span><span class="token punctuation">(</span><span class="token keyword">class</span> <span class="token class-name">SubModel</span><span class="token operator">*</span> model<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">void</span> <span class="token function">SetModelMatrix</span><span class="token punctuation">(</span>glm<span class="token operator">::</span>mat4 modelMatrix<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+</code></pre></div><p>Il costruttore di default prende in ingresso il riferimento alla classe <code>Game</code> ed il nome che si vuole associare allo shader, saranno poi le classi che la specializzano a salvare nel campo protetto <code>ShaderProgram* _shaderProgram</code> il programma shader al quale fanno riferimento. Attualmente abbiamo implementato tre diverse classi che estendono <code>BasicShader</code>:</p> <ul><li><code>MaterialShader</code>. Questa classe viene utilizzata nei vari modelli del gioco come la macchina, gli alberi ed il cartello con la foto. Permette sia di utilizzare le texture che di utilizzare dei semplici valori di albedo, diffuse e specular per colorare l'oggetto.</li> <li><code>TerrainShader</code>. E' la classe che rappresenta lo shader per la visualizzazione del terreno. Dato che nello shader GLSL è stato utilizzato il meccanismo della <em>blend map</em> per applicare diverse texture allo stesso terreno, la classe si occupa anche di impostare l'uniform intero associato ad ognuna delle texture utilizzate.</li> <li><code>GUIShader</code>. Si tratta della classe più semplice delle tre in quanto lo shader GLSL che utilizza ha solamente un uniform che rappresenta la texture da applicare all'elemento dell'interfaccia grafica.</li></ul> <p>Ognuna di queste classi specializza il metodo <code>Use()</code>, il quale sfrutta i metodi <code>SetUniformXXX()</code> messi a disposizione da <code>ShaderProgram</code> per cambiare i valori dei diversi <code>uniform</code> che fanno parte dello shader GLSL.</p> <h3 id="esampio-di-shader-glsl"><a href="#esampio-di-shader-glsl" aria-hidden="true" class="header-anchor">#</a> Esampio di shader GLSL</h3> <h4 id="vertex-shader"><a href="#vertex-shader" aria-hidden="true" class="header-anchor">#</a> Vertex Shader</h4> <p>Ora vediamo velocemente il vertex shader utilizzano nella classe <code>MaterialShader</code>. Si tratta di un programma molto semplice, infatti prende in ingresso la posizione del vertice, la sua normale e le coordinate della texture ad esso associata (ricordiamo che il vertex shader viene chiamato per ognuno dei vertici che fanno parte della mesh).</p> <p>Lo shader richiede anche le matrici del modello, della vista e quella di proiezione. Queste matrici vengono passate direttamente dal codice C++ essendo degli <code>uniform</code>.</p> <p>In uscita dal vertex shader abbiamo:</p> <ul><li>La normale con la trasformazione applicata. Questo valore verrà utilizzato nel fragment shader per diversi calcoli, come ad esempio definire quanto incide il valore della specular da un determinato punto di vista.</li> <li>Le coordinate della texture e le coordinate del fragment.</li> <li>Infine la coordinata del vertice con le tre trasformazioni applicate.</li></ul> <div class="language-GLSL extra-class"><pre class="language-glsl"><code><span class="token preprocessor builtin">#version</span> <span class="token number">330</span>
+
+<span class="token keyword">layout</span> <span class="token punctuation">(</span>location <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token keyword">vec3</span> vPosition<span class="token punctuation">;</span>
+<span class="token keyword">layout</span> <span class="token punctuation">(</span>location <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token keyword">vec2</span> vTexCoord<span class="token punctuation">;</span>
+<span class="token keyword">layout</span> <span class="token punctuation">(</span>location <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token keyword">in</span> <span class="token keyword">vec3</span> vNormal<span class="token punctuation">;</span>
+
+<span class="token keyword">uniform</span> <span class="token keyword">mat4</span> model<span class="token punctuation">;</span>
+<span class="token keyword">uniform</span> <span class="token keyword">mat4</span> view<span class="token punctuation">;</span>
+<span class="token keyword">uniform</span> <span class="token keyword">mat4</span> projection<span class="token punctuation">;</span>
+
+<span class="token keyword">out</span> <span class="token keyword">vec2</span> TexCoord0<span class="token punctuation">;</span>
+<span class="token keyword">out</span> <span class="token keyword">vec3</span> FragPos<span class="token punctuation">;</span>
+<span class="token keyword">out</span> <span class="token keyword">vec3</span> Normal<span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    Normal <span class="token operator">=</span> <span class="token keyword">mat3</span><span class="token punctuation">(</span><span class="token function">transpose</span><span class="token punctuation">(</span><span class="token function">inverse</span><span class="token punctuation">(</span>model<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">*</span> vNormal<span class="token punctuation">;</span>
+    TexCoord0 <span class="token operator">=</span> vTexCoord<span class="token punctuation">;</span>
+    FragPos <span class="token operator">=</span> <span class="token keyword">vec3</span><span class="token punctuation">(</span>model <span class="token operator">*</span> <span class="token keyword">vec4</span><span class="token punctuation">(</span>vPosition<span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    gl_Position <span class="token operator">=</span> projection <span class="token operator">*</span> view <span class="token operator">*</span> model <span class="token operator">*</span>  <span class="token keyword">vec4</span><span class="token punctuation">(</span>vPosition<span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">}</span>
+</code></pre></div><h4 id="fragment-shader"><a href="#fragment-shader" aria-hidden="true" class="header-anchor">#</a> Fragment shader</h4> <p>Questo programma è più complesso di quello precedente, e presenta al suo interno anche alcune strutture che permettono una maggiore comprensione dei valori con i quali stiamo lavorando. Abbiamo infatti:</p> <div class="language-GLSL extra-class"><pre class="language-glsl"><code><span class="token preprocessor builtin">#version</span> <span class="token number">330</span>
+
+<span class="token preprocessor builtin">#define</span> NR_POINT_LIGHTS <span class="token number">1</span>
+<span class="token preprocessor builtin">#define</span> NR_SPOT_LIGHTS <span class="token number">2</span>
+
+<span class="token keyword">out</span> <span class="token keyword">vec4</span> FragColor<span class="token punctuation">;</span>
+
+<span class="token keyword">in</span> <span class="token keyword">vec3</span> FragPos<span class="token punctuation">;</span>
+<span class="token keyword">in</span> <span class="token keyword">vec3</span> Normal<span class="token punctuation">;</span>
+<span class="token keyword">in</span> <span class="token keyword">vec2</span> TexCoord0<span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> Material <span class="token punctuation">{</span>
+    <span class="token keyword">sampler2D</span> diffuseTex<span class="token punctuation">;</span>
+    <span class="token keyword">sampler2D</span> specularTex<span class="token punctuation">;</span>
+
+    <span class="token keyword">bool</span> hasTextures<span class="token punctuation">;</span>
+
+    <span class="token keyword">vec3</span> ambient<span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> diffuse<span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> specular<span class="token punctuation">;</span>
+
+    <span class="token keyword">float</span> shininess<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">struct</span> Light <span class="token punctuation">{</span>
+
+    <span class="token comment">// positon per point light</span>
+    <span class="token comment">// direction per directional light</span>
+    <span class="token comment">// con spot light si usano entrambe</span>
+    <span class="token keyword">vec3</span> position<span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> direction<span class="token punctuation">;</span>
+
+    <span class="token keyword">vec3</span> ambient<span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> diffuse<span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> specular<span class="token punctuation">;</span>
+
+    <span class="token comment">// per point light</span>
+    <span class="token keyword">float</span> constant<span class="token punctuation">;</span>
+    <span class="token keyword">float</span> linear<span class="token punctuation">;</span>
+    <span class="token keyword">float</span> quadratic<span class="token punctuation">;</span>
+
+    <span class="token comment">// per spot light</span>
+    <span class="token keyword">float</span> cutOff<span class="token punctuation">;</span>
+    <span class="token keyword">float</span> outerCutOff<span class="token punctuation">;</span>
+<span class="token punctuation">}</span><span class="token punctuation">;</span>
+
+<span class="token keyword">uniform</span> Material material<span class="token punctuation">;</span>
+
+<span class="token keyword">uniform</span> Light dirLight<span class="token punctuation">;</span>
+
+<span class="token keyword">uniform</span> Light pointLigths<span class="token punctuation">[</span>NR_POINT_LIGHTS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">uniform</span> Light spotLigths<span class="token punctuation">[</span>NR_SPOT_LIGHTS<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token keyword">uniform</span> <span class="token keyword">vec3</span> viewPos<span class="token punctuation">;</span>
+
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">vec3</span> norm <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span>Normal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">vec3</span> viewDir <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span>viewPos <span class="token operator">-</span> FragPos<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">vec3</span> result <span class="token operator">=</span> <span class="token function">calcDirectionalLight</span><span class="token punctuation">(</span>dirLight<span class="token punctuation">,</span> norm<span class="token punctuation">,</span> viewDir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> NR_POINT_LIGHTS<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        result <span class="token operator">+</span><span class="token operator">=</span> <span class="token function">calcPointLight</span><span class="token punctuation">(</span>pointLigths<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> norm<span class="token punctuation">,</span> FragPos<span class="token punctuation">,</span> viewDir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> NR_SPOT_LIGHTS<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        <span class="token function">calcSpotLight</span><span class="token punctuation">(</span>spotLigths<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">,</span> norm<span class="token punctuation">,</span> FragPos<span class="token punctuation">,</span> viewDir<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    FragColor <span class="token operator">=</span> <span class="token keyword">vec4</span><span class="token punctuation">(</span>result<span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Lo shader in questione calcola il colore per ognuno dei punti come somma dei valori dati: dalla luce direzione (ad esempio il Sole), da tutte le luci puntiformi (una lampadina) ed infine dalle luci di tipo spot (tipo torcia).</p> <p>Come esempio prendiamo ora la funzione per calcolare come il colore dell'oggeto varia in base alla luce direzionale. Abbiamo quindi la funzione:</p> <div class="language-GLSL extra-class"><pre class="language-glsl"><code><span class="token keyword">vec3</span> <span class="token function">calcDirectionalLight</span><span class="token punctuation">(</span>Light light<span class="token punctuation">,</span> <span class="token keyword">vec3</span> normal<span class="token punctuation">,</span> <span class="token keyword">vec3</span> viewDir<span class="token punctuation">)</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">vec3</span> lightDir <span class="token operator">=</span> <span class="token function">normalize</span><span class="token punctuation">(</span><span class="token operator">-</span>light<span class="token punctuation">.</span>direction<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// diffuse shading</span>
+    <span class="token keyword">float</span> diff <span class="token operator">=</span> <span class="token function">max</span><span class="token punctuation">(</span><span class="token function">dot</span><span class="token punctuation">(</span>normal<span class="token punctuation">,</span> lightDir<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// specular shading</span>
+    <span class="token keyword">vec3</span> reflectDir <span class="token operator">=</span> <span class="token function">reflect</span><span class="token punctuation">(</span><span class="token operator">-</span>lightDir<span class="token punctuation">,</span> normal<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">float</span> spec <span class="token operator">=</span> <span class="token function">pow</span><span class="token punctuation">(</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token function">dot</span><span class="token punctuation">(</span>viewDir<span class="token punctuation">,</span> reflectDir<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> material<span class="token punctuation">.</span>shininess<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">vec3</span> ambient<span class="token punctuation">,</span> diffuse<span class="token punctuation">,</span> specular<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>material<span class="token punctuation">.</span>hasTextures<span class="token punctuation">)</span>
+    <span class="token punctuation">{</span>
+        ambient <span class="token operator">=</span> light<span class="token punctuation">.</span>ambient <span class="token operator">*</span> <span class="token keyword">vec3</span><span class="token punctuation">(</span><span class="token function">texture</span><span class="token punctuation">(</span>material<span class="token punctuation">.</span>diffuseTex<span class="token punctuation">,</span> TexCoord0<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        diffuse <span class="token operator">=</span> light<span class="token punctuation">.</span>diffuse <span class="token operator">*</span> diff <span class="token operator">*</span> <span class="token keyword">vec3</span><span class="token punctuation">(</span><span class="token function">texture</span><span class="token punctuation">(</span>material<span class="token punctuation">.</span>diffuseTex<span class="token punctuation">,</span> TexCoord0<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        specular <span class="token operator">=</span> light<span class="token punctuation">.</span>specular <span class="token operator">*</span> spec <span class="token operator">*</span> <span class="token keyword">vec3</span><span class="token punctuation">(</span><span class="token function">texture</span><span class="token punctuation">(</span>material<span class="token punctuation">.</span>specularTex<span class="token punctuation">,</span> TexCoord0<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token keyword">else</span>
+    <span class="token punctuation">{</span>
+        ambient <span class="token operator">=</span> light<span class="token punctuation">.</span>ambient <span class="token operator">*</span> material<span class="token punctuation">.</span>diffuse<span class="token punctuation">;</span>
+        diffuse <span class="token operator">=</span> light<span class="token punctuation">.</span>diffuse <span class="token operator">*</span> diff <span class="token operator">*</span> material<span class="token punctuation">.</span>diffuse<span class="token punctuation">;</span>
+        specular <span class="token operator">=</span> light<span class="token punctuation">.</span>specular <span class="token operator">*</span> spec <span class="token operator">*</span> material<span class="token punctuation">.</span>specular<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+     <span class="token keyword">return</span> <span class="token punctuation">(</span>ambient <span class="token operator">+</span> diffuse <span class="token operator">+</span> specular<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre></div><p>Questa funzione prende come ingresso la luce direzionale, il vettore che rappresenta la normale del vertice ed il vettore che rappresenta la direzione della quale stiamo osservando la scena.</p> <p>Per prima cosa normalizziamo il vettore direzione della luce, dopodiché dobbiamo calcolare con quale angolo la luce colpisce l'oggetto. Per fare questo utilizziamo il prodotto scalare insieme alla funzione <code>max</code> (questo perchè se l'angolo è maggiore di 90° otteniamo un valore negativo ed in questo modo mettiamo come valore minimo possibile 0.0, ovvero la luce direzione non aggiunge nulla al colore finale).</p> <p>Adesso che abbiamo calcolato la componenete diffuse del colore, passiamo a quella della specular. Prima di tutto calcoliamo il prodotto scalare fra la direzione di vista e la direzione del riflesso, e come abbiamo fatto in precedenza controlliamo che non sia negativo. A questo punto eleviamo tutto per il coefficiente di lucentezza. Più alto è questo valore e maggiore sarà la riflessione della luce da parte dell'oggetto.</p> <p>Infine controlliamo se la mesh fa uso o meno di texture e calcoliamo le componenti colore finali in base a questo.</p></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/docs/engine-core.html" class="prev">
+          Modulo Core dell'Engine
+        </a></span> <span class="next"><a href="/docs/game.html">
+          Game
+        </a>
+        →
+      </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/docs/assets/js/app.f0baf905.js" defer></script><script src="/docs/assets/js/2.83deb042.js" defer></script><script src="/docs/assets/js/8.9dfec95c.js" defer></script>
+  </body>
+</html>

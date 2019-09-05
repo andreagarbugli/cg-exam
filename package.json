@@ -1,0 +1,25 @@
+{
+    "name": "computer-graphics-exercises",
+    "version": "1.0.0",
+    "description": "",
+    "directories": {
+        "doc": "docs"
+    },
+    "scripts": {
+        "docs:dev": "vuepress dev docs-dev",
+        "docs:build": "vuepress build docs-dev"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/andreagarbugli/cg-exam.git"
+    },
+    "author": "Andrea Garbugli",
+    "bugs": {
+        "url": "https://github.com/andreagarbugli/cg-exam/issues"
+    },
+    "homepage": "https://github.com/andreagarbugli/cg-exam#readme",
+    "devDependencies": {
+        "markdown-it-katex": "2.0.3",
+        "vuepress": "^1.0.3"
+    }
+}

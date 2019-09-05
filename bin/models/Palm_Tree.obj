@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: 'Palm_Tree.blend'
 # www.blender.org
-mtllib Palm_Tree.mtl
+mtllib ./models/Palm_Tree.mtl
 o Palm-tree_Cylinder
 v 0.198761 4.758024 -0.550688
 v -1.087184 4.587959 -1.304786

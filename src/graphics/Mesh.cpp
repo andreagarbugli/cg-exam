@@ -1,17 +1,25 @@
-#include <GL/glew.h>
+#include <GL/gl3w.h>
 
 #include "Mesh.hpp"
 
 namespace Graphics
 {
     Mesh::Mesh(Utils::RawMesh& model) :
-            _vertexArrayObject{ 0 }
+            _vertexArrayObject{0},
+            _vertexBufferObject{0},
+            _uvBufferObject{0},
+            _normalBufferObject{0},
+            _indexBufferObject{0}
     {
-        _verticesNumber = static_cast<unsigned int>(model.vertices.size());
-        _uvsNumber = static_cast<unsigned int>(model.uvs.size());
-        _normalsNumber = static_cast<unsigned int>(model.normals.size());
+        _verticesNumber = static_cast<unsigned int>(model.vertices
+                                                         .size());
+        _uvsNumber = static_cast<unsigned int>(model.uvs
+                                                    .size());
+        _normalsNumber = static_cast<unsigned int>(model.normals
+                                                        .size());
 
-        if (model.indices.empty())
+        if (model.indices
+                 .empty())
         {
             _hasIndices = false;
             _indicesNumber = 0;
@@ -19,7 +27,8 @@ namespace Graphics
         else
         {
             _hasIndices = true;
-            _indicesNumber = static_cast<unsigned int>(model.indices.size());
+            _indicesNumber = static_cast<unsigned int>(model.indices
+                                                            .size());
         }
 
         glGenVertexArrays(1, &_vertexArrayObject);
@@ -53,7 +62,6 @@ namespace Graphics
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glBindVertexArray(0);
-
     }
 
     Mesh::~Mesh()
@@ -101,4 +109,4 @@ namespace Graphics
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
     }
-}
+} // namespace Graphics

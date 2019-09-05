@@ -8,10 +8,10 @@ Kd 0.000000 0.000000 0.000000
 Ks 0.000000 0.000000 0.000000
 Ke 0.0 0.0 0.0
 Ni 1.000000
-d 0.000000
+d 1.000000
 illum 1
-map_Kd /home/andrea/Downloads/Lamborginhi_Aventador_OBJ/Lamborginhi Aventador OBJ/Lamborginhi Aventador_diffuse.jpeg
-map_Ks /home/andrea/Downloads/Lamborginhi_Aventador_OBJ/Lamborginhi Aventador OBJ/Lamborginhi Aventador_spec.jpeg
+map_Kd ./textures/lamb_diff.jpeg
+map_Ks ./textures/lamb_spec.jpeg
 
 newmtl lambo_glass_sg
 Ns 4.310004
@@ -20,5 +20,5 @@ Kd 0.000000 0.000000 0.000000
 Ks 0.700000 0.700000 0.700000
 Ke 0.0 0.0 0.0
 Ni 1.000000
-d 0.000000
+d 0.001
 illum 9

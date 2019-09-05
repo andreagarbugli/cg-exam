@@ -1,7 +1,3 @@
-//
-// Created by andrea on 01/10/18.
-//
-
 #ifndef ENGINE_INPUTMANAGER_HPP
 #define ENGINE_INPUTMANAGER_HPP
 
@@ -12,105 +8,101 @@
 
 namespace Engine
 {
-class InputManager
-{
-  private:
-    const uint8_t *_keyboard = nullptr;
-    unsigned int _mouse;
-
-    bool _mouseFirstMoved = true;
-
-    bool _initializated = false;
-
-    int _lastX = 0;
-    int _lastY = 0;
-    float _xChange = 0;
-    float _yChange = 0;
-    int _mouseX = 0;
-    int _mouseY = 0;
-
-    bool _keyDown[KEYBOARD_SIZE];
-    bool _keyUp[KEYBOARD_SIZE];
-
-    bool _mouseDownButtons[MOUSE_BUTTON_NUMBER];
-    bool _mouseUpButtons[MOUSE_BUTTON_NUMBER];
-
-    bool _quit = false;
-    bool _locked = false;
-
-    GlobalStateManager *_globalStateManager = GlobalStateManager::GetInstance();
-
-  public:
-    static InputManager *GetInstance()
+    class InputManager
     {
-        static auto *_instance = new InputManager();
-        return _instance;
-    }
+    private:
+        const uint8_t* _keyboard = nullptr;
+        unsigned int _mouse{};
 
-    void Init();
+        bool _initializated = false;
 
-    void Update();
+        int _lastX = 0;
+        int _lastY = 0;
+        float _xChange = 0;
+        float _yChange = 0;
+        int _mouseX = 0;
+        int _mouseY = 0;
 
-    bool IsKeyDown(KeyboardKey key);
+        bool _keyDown[KEYBOARD_SIZE]{};
+        bool _keyUp[KEYBOARD_SIZE]{};
 
-    bool IsKeyUp(KeyboardKey key);
+        bool _mouseDownButtons[MOUSE_BUTTON_NUMBER]{};
+        bool _mouseUpButtons[MOUSE_BUTTON_NUMBER]{};
 
-    bool IsKeyPressed(KeyboardKey key);
+        bool _quit = false;
+        bool _locked = false;
 
-    bool IsMouseDown(MouseButton mouseButton);
+    public:
+        static InputManager* GetInstance()
+        {
+            static auto* _instance = new InputManager();
+            return _instance;
+        }
 
-    bool IsMouseUp(MouseButton mouseButton);
+        void Init();
 
-    bool IsMousePressed(MouseButton mouseButton);
+        void Update();
 
-    bool QuitRequested()
-    {
-        return _quit;
-    }
+        bool IsKeyDown(KeyboardKey key);
 
-    int GetMouseX()
-    {
-        return _mouseX;
-    }
+        bool IsKeyUp(KeyboardKey key);
 
-    int GetMouseY()
-    {
-        return _mouseY;
-    }
+        bool IsKeyPressed(KeyboardKey key);
 
-    int GetLastX() const
-    {
-        return _lastX;
-    }
+        bool IsMouseDown(MouseButton mouseButton);
 
-    int GetLastY() const
-    {
-        return _lastY;
-    }
+        bool IsMouseUp(MouseButton mouseButton);
 
-    float GetXChange() const
-    {
-        return _xChange;
-    }
+        bool IsMousePressed(MouseButton mouseButton);
 
-    float GetYChange() const
-    {
-        return _yChange;
-    }
+        bool QuitRequested()
+        {
+            return _quit;
+        }
 
-    void Lock()
-    {
-        _locked = true;
-    }
+        int GetMouseX()
+        {
+            return _mouseX;
+        }
 
-    void Unlock()
-    {
-        _locked = false;
-    }
+        int GetMouseY()
+        {
+            return _mouseY;
+        }
 
-  private:
-    InputManager() = default;
-};
+        int GetLastX() const
+        {
+            return _lastX;
+        }
+
+        int GetLastY() const
+        {
+            return _lastY;
+        }
+
+        float GetXChange() const
+        {
+            return _xChange;
+        }
+
+        float GetYChange() const
+        {
+            return _yChange;
+        }
+
+        void Lock()
+        {
+            _locked = true;
+        }
+
+        void Unlock()
+        {
+            _locked = false;
+        }
+
+    private:
+        InputManager() = default;
+    };
 
 } // namespace Engine
 

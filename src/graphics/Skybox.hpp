@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include "GLSLShader.hpp"
+#include "ShaderProgram.hpp"
 #include "CubeMap.hpp"
 
 namespace Graphics
@@ -14,11 +14,10 @@ namespace Graphics
 
     private:
         CubeMap* _cubemap;
-        GLSLShader* _shader;
+        ShaderProgram* _shader;
 
         unsigned int _skyboxVAO;
         unsigned int _skyboxVBO;
-
 
     public:
         Skybox() = default;

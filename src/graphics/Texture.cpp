@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <GL/glew.h>
+#include <GL/gl3w.h>
 
 #include <SDL2/SDL_image.h>
 
@@ -8,9 +8,10 @@
 
 namespace Graphics
 {
-
     Texture::Texture() :
-            _textureID{ 0 }
+            _textureID{0},
+            _width{0},
+            _height{0}
     {
     }
 
@@ -29,7 +30,8 @@ namespace Graphics
         }
 
         GLenum format = GL_RGB;
-        if (_image->format->BytesPerPixel == 4)
+        if (_image->format
+                  ->BytesPerPixel == 4)
         {
             format = GL_RGBA;
         }
@@ -83,4 +85,41 @@ namespace Graphics
         return _width;
     }
 
-}
+    unsigned int Texture::GetTextureID()
+    {
+        return _textureID;
+    }
+
+    void Texture::CreateForRendering(int width, int height, unsigned int format)
+    {
+        _width = width;
+        _height = height;
+
+        glGenTextures(1, &_textureID);
+        glBindTexture(GL_TEXTURE_2D, _textureID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, format, _width, _height, 0,
+                     GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _textureID, 0);
+    }
+
+    void Texture::CreateFromSurace(SDL_Surface* surface)
+    {
+        _width = surface->w;
+        _height = surface->h;
+
+        glGenTextures(1, &_textureID);
+        glBindTexture(GL_TEXTURE_2D, _textureID);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0,
+                     GL_BGRA, GL_UNSIGNED_BYTE, surface->pixels);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    }
+
+} // namespace Graphics

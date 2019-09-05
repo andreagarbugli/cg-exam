@@ -53,8 +53,8 @@ namespace Graphics
                 1.0f, -1.0f,  1.0f
         };
 
-        _shader = new GLSLShader();
-        _shader->Load("shaders/skybox.vert", "shaders/skybox.frag");
+        _shader = new ShaderProgram();
+        _shader->Load("./shaders/skybox.vert", "./shaders/skybox.frag");
 
         _cubemap = new CubeMap();
         _cubemap->Load(fileNames);

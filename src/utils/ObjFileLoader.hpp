@@ -1,7 +1,6 @@
 #ifndef ENGINE_OBJFILELOADER_HPP
 #define ENGINE_OBJFILELOADER_HPP
 
-#include <cstring>
 #include <map>
 #include <string>
 #include <vector>
@@ -30,7 +29,7 @@ namespace Utils
         std::vector<glm::vec2> uvs;
         std::vector<glm::vec3> normals;
         std::vector<unsigned int> indices;
-
+        std::string materialName;
         std::string name;
     };
 
@@ -43,15 +42,14 @@ namespace Utils
 
     struct Material
     {
-        float ka; // ambient rgb
-        float kd; // diffuse rgb
-        float ks; // specular rgb
+        glm::vec3 ka; // ambient rgb
+        glm::vec3 kd; // diffuse rgb
+        glm::vec3 ks; // specular rgb
         float ns; // specular exponent 0 - 1000
-
+        std::string mapKd;
+        std::string mapKs;
         float d; // dissolved ovvero la trasparenza.
-
         int illum;
-
         std::string name;
     };
 
@@ -69,11 +67,13 @@ namespace Utils
         std::vector<Face> _faces;
 
         std::vector<RawMesh*> _meshes;
+        unsigned int _currentObjIndex;
+        unsigned int _numberObjs;
 
         std::string _mtlFileName;
         std::vector<Material*> _materials;
+        unsigned int _numberMaterials;
 
-        unsigned int _numberObjs;
         bool _isIndexed;
         bool _hasNormals;
 
@@ -81,17 +81,17 @@ namespace Utils
 
         ObjFileLoader();
 
-        void Clear();
-
-        bool LoadObj(std::string fileName, bool indexed = false);
+        bool LoadObj(const std::string& fileName, bool indexed = false);
 
         std::vector<RawMesh*> GetMeshes();
+
+        std::vector<Material*> GetMaterials();
 
     private:
 
         void _AddVertexCoord(std::vector<std::string> vectorParams);
 
-        std::vector<std::string> _SplitLine(std::string str, std::string delim = " ");
+        static std::vector<std::string> _SplitLine(const std::string& str, const std::string& delim = " ");
 
         void _AddFaceElement(std::vector<std::string> params);
 
@@ -99,20 +99,23 @@ namespace Utils
 
         void _AddNormal(std::vector<std::string> vector);
 
-        void _AddObject(std::vector<std::string> params);
+        void _AddObject(std::string& objectName);
 
-        void _CompleteRawMesh();
+        void _CompleteRawMesh(bool isSubMesh = false);
 
         void _GetRawMesh(RawMesh& mesh);
 
         void _GetRawMeshIndexed(RawMesh& mesh);
 
-        bool _GetSimilarVertexIndex(Vertex& vertex, std::map<Vertex, unsigned int>& map, unsigned int& index);
+        static bool _GetSimilarVertexIndex(Vertex& vertex, std::map<Vertex, unsigned int>& map, unsigned int& index);
 
-        bool _ReadObjFile(std::string fileName);
+        static glm::vec3  _ParseMaterialColor(std::vector<std::string> params);
 
-        void _ReadMtlFile();
+        bool _ReadObjFile(const std::string& fileName);
 
+        bool _ReadMtlFile();
+
+        void _UseNewMaterial(std::string& materialName);
     };
 }
 

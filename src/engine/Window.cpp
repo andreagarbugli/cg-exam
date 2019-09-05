@@ -1,7 +1,3 @@
-//
-// Created by andrea on 22/10/18.
-//
-
 #include <iostream>
 #include <GL/gl.h>
 
@@ -9,7 +5,7 @@
 
 namespace Engine
 {
-    Window Window::CreateWindow(std::string name, int width, int height)
+    Window* Window::CreateWindow(const std::string& name, int width, int height)
     {
         int dispNumber = SDL_GetNumVideoDisplays() - 1;
 
@@ -27,7 +23,7 @@ namespace Engine
         // Create our opengl context and attach it to our window
         auto glContext = SDL_GL_CreateContext(sdlWindow);
 
-        return { sdlWindow, glContext, width, height };
+        return new Window(sdlWindow, glContext, width, height);
     }
 
     void Window::SwapBuffers()
@@ -46,7 +42,6 @@ namespace Engine
         // Clear the window
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     }
 
     int Window::GetHeight()
@@ -56,12 +51,17 @@ namespace Engine
 
     float Window::GetRatio()
     {
-        return _width / (float) _height;
+        return (float) _width / (float) _height;
     }
 
     int Window::GetWidth()
     {
         return _width;
+    }
+
+    SDL_Renderer* Window::GetSdlRenderer() const
+    {
+        return _sdlRenderer;
     }
 
 } // namespace Engine

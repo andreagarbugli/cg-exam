@@ -1,0 +1,11 @@
+target_sources(cg-exam
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/BasicShader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/BasicShader.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/MaterialShader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/MaterialShader.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/GUIShader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/GUIShader.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/TerrainShader.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/TerrainShader.hpp
+        )

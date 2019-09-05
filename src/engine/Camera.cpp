@@ -3,7 +3,48 @@
 
 namespace Engine
 {
-    void Camera::Update(double deltaTime)
+    /**************************/
+    /*      BASIC CAMERA      */
+    /**************************/
+
+    glm::mat4 BasicCamera::_CalculateViewMatrix()
+    {
+        return glm::lookAt(_position, _position + _front, _up);
+    }
+
+    glm::mat4 BasicCamera::GetViewMatrix() const
+    {
+        return _viewMatrix;
+    }
+
+    glm::vec3 BasicCamera::GetDirecton() const
+    {
+        return glm::normalize(_front);
+    }
+
+    glm::vec3 BasicCamera::GetFront()
+    {
+        return _front;
+    }
+
+
+    void BasicCamera::Update(double deltaTime)
+    {
+        _UpdatePosition(deltaTime);
+
+        _viewMatrix = _CalculateViewMatrix();
+    }
+
+    void BasicCamera::_UpdatePosition(double deltaTime)
+    {
+
+    }
+
+    /**************************/
+    /*         CAMERA         */
+    /**************************/
+
+    void Camera::_UpdatePosition(double deltaTime)
     {
         auto velocity = static_cast<float>(_movementSpeed * deltaTime);
 
@@ -55,27 +96,51 @@ namespace Engine
         _front = glm::normalize(_front);
         _right = glm::normalize(glm::cross(_front, _worldUp));
         _up = glm::normalize(glm::cross(_right, _front));
-
-        _viewMatrix = _CalculateViewMatrix();
-    }
-
-    glm::mat4 Camera::_CalculateViewMatrix()
-    {
-        return glm::lookAt(_position, _position + _front, _up);
-    }
-
-    glm::mat4 Camera::GetViewMatrix() const
-    {
-        return _viewMatrix;
-    }
-
-    glm::vec3 Camera::GetDirecton() const
-    {
-        return glm::normalize(_front);
     }
 
     void Camera::SetMovimentSpeed(float speed)
     {
         _movementSpeed = speed;
+    }
+
+
+    /**************************/
+    /*     FOLLOW CAMERA      */
+    /**************************/
+
+    void FollowCamera::_UpdatePosition(double deltaTime)
+    {
+        auto cameraPos = _player->GetPosition();
+
+        glm::vec3 playerForward(0.0f);
+        auto playerFacingRad = Math::DegToRad(_player->GetRotationAngle());
+
+        playerForward.x = Math::Sin(playerFacingRad);
+        playerForward.z = Math::Cos(playerFacingRad);
+
+        cameraPos -= playerForward * _horizontalDistance;
+        cameraPos += _worldUp * _verticalDistance;
+
+        _position = cameraPos;
+    }
+
+    glm::mat4 FollowCamera::_CalculateViewMatrix()
+    {
+        return glm::lookAt(_position, _player->GetPosition(), _worldUp);
+    }
+
+    void FollowCamera::SetPlayer(GameObject* player)
+    {
+        _player = player;
+    }
+
+    void FollowCamera::SetHorizontalDistance(float horizontalDistance)
+    {
+        _horizontalDistance = horizontalDistance;
+    }
+
+    void FollowCamera::SetVerticalDistance(float verticalDistance)
+    {
+        _verticalDistance = verticalDistance;
     }
 }

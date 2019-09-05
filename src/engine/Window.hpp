@@ -4,6 +4,7 @@
 #include <string>
 
 #include <SDL2/SDL_video.h>
+#include <SDL_render.h>
 
 namespace Engine
 {
@@ -12,6 +13,7 @@ namespace Engine
     private:
         SDL_Window* _sdlWindow;
         SDL_GLContext _glContext;
+        SDL_Renderer* _sdlRenderer;
 
         int _width;
         int _height;
@@ -19,7 +21,7 @@ namespace Engine
     public:
         Window() = default;
 
-        static Window CreateWindow(std::string name, int width, int height);
+        static Window* CreateWindow(const std::string& name, int width, int height);
 
         void SwapBuffers();
 
@@ -33,13 +35,16 @@ namespace Engine
 
         int GetWidth();
 
+        SDL_Renderer* GetSdlRenderer() const;
+
     private:
         Window(SDL_Window* window, SDL_GLContext context, int width, int height) :
-                _sdlWindow{ window },
-                _glContext{ context },
-                _width{ width },
-                _height{ height }
+                _sdlWindow{window},
+                _glContext{context},
+                _width{width},
+                _height{height}
         {
+            _sdlRenderer = SDL_GetRenderer(_sdlWindow);
         }
     };
 } // namespace Engine

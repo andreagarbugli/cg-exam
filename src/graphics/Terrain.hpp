@@ -9,20 +9,19 @@
 
 #include "Mesh.hpp"
 #include "Texture.hpp"
-#include "GLSLShader.hpp"
 
 #include "engine/GameObject.hpp"
 
-using namespace Engine;
+#include "shaders/BasicShader.hpp"
 
 namespace Graphics
 {
-    class Terrain : public GameObject
+    class Terrain : public Engine::GameObject
     {
     private:
         static constexpr float SIZE = 800.0f;
         static constexpr float MAX_HEIGHT = 40.0f;
-        static constexpr int MAX_PIXEL_COLOR  = 256;
+        static constexpr int MAX_PIXEL_COLOR = 256;
 
         float* terrainHeights;
 
@@ -41,18 +40,19 @@ namespace Graphics
 
         Texture* _specular;
 
-        GLSLShader* _shader;
+        BasicShader* _shader;
 
     public:
-        Terrain(class Game* game, const std::string& name,
+        Terrain(Engine::Game* game, const std::string& name,
                 glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f),
                 glm::vec3 scale = glm::vec3(1.0f, 1.0f, 1.0f),
                 glm::vec3 rotation = glm::vec3(0.0f, 0.0f, 0.0f),
                 int gridX = -1,
                 int gridZ = -1) :
-                GameObject(game, name, position, scale, rotation),
-                _x{ gridX * SIZE / 2},
-                _z{ gridZ * SIZE / 2}
+                Engine::GameObject(game, name, position, scale, rotation),
+                _x{ gridX * SIZE / 2 },
+                _z{ gridZ * SIZE / 2 },
+                _vertexCount{ 0 }
         {
             _mesh = _GenerateTerrain();
 
@@ -72,13 +72,9 @@ namespace Graphics
             _specular->Load("textures/black.jpg");
         }
 
-        void Draw() override;
+        void Draw(Graphics::BasicShader* shader) override;
 
-        float GetTerrainHeightAt(float worldX, float worldZ);
-
-        void SetShader(GLSLShader* shader);
-
-     //   void SetTexture(Texture* texture);
+        void SetShader(BasicShader* shader);
 
     private:
 
@@ -86,7 +82,7 @@ namespace Graphics
 
         Mesh* _GenerateTerrain();
 
-        float _GetHeight(SDL_Surface* image,int x, int y);
+        float _GetHeight(SDL_Surface* image, int x, int y);
 
         Uint32 _GetPixel(SDL_Surface* image, int x, int y);
     };

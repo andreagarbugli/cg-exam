@@ -12,12 +12,16 @@
 #include "InputManager.hpp"
 #include "Window.hpp"
 
-#include "graphics/GLSLShader.hpp"
+#include "game/Minimap.hpp"
+
+#include "graphics/GUIComponent.hpp"
 #include "graphics/Light.hpp"
 #include "graphics/Model.hpp"
-#include "graphics/Texture.hpp"
 #include "graphics/Skybox.hpp"
 #include "graphics/Terrain.hpp"
+#include "graphics/Texture.hpp"
+
+#include "shaders/BasicShader.hpp"
 
 const int WINDOW_HEIGHT = 720;
 const int WINDOW_WIDTH = 1280;
@@ -31,7 +35,7 @@ namespace Engine
     class Game
     {
     private:
-        Window _window{ };
+        Window* _window{};
 
         GlobalStateManager* _globalStateManager = GlobalStateManager::GetInstance();
         InputManager* _inputManager = InputManager::GetInstance();
@@ -39,20 +43,34 @@ namespace Engine
         std::vector<class GameObject*> _gameObjects;
         std::vector<class GameObject*> _pendingGameObjects;
 
-        Graphics::Skybox _skybox{ };
+        Graphics::Skybox _skybox{};
 
-        std::map<std::string, Graphics::Texture*> _textures;
-        std::map<std::string, Graphics::GLSLShader*> _shaders;
-        std::vector<Graphics::Model*> _models;
+        std::unordered_map<std::string, Graphics::BasicShader*> _shaders;
 
-        Camera* _currentCamera{ };
-        Graphics::Terrain* _terrain;
+        std::unordered_map<std::string, Graphics::Font*> _fonts;
+        std::unordered_map<std::string, Graphics::GUIComponent*> _guiStack;
 
-        Graphics::DirectionalLight* _directionalLight{ };
+        BasicCamera* _currentCamera{};
+        Graphics::Terrain* _terrain{};
+
+        RacingGame::Minimap* _minimap{};
+
+        Graphics::DirectionalLight* _directionalLight{};
+
         std::vector<Graphics::PointLight*> _pointLights;
+        std::vector<Graphics::SpotLight*> _spotLights;
 
         bool _updatingGameObjects = false;
-        bool _isMouseCaptured = true;
+        bool _isLineMode = false;
+        int _cameraMode = 0;
+        bool _isMouseCaptured = false;
+        bool _isMenuVisible = true;
+        bool _isMinimapActive = true;
+        bool _isNight = true;
+        bool _isWinner = false;
+        bool _isPrintInfo = true;
+        bool _isPointLightActive = true;
+        bool _isSpotLightActive = true;
 
     public:
 
@@ -64,13 +82,31 @@ namespace Engine
 
         bool AddGameObject(GameObject* gameObject);
 
-        Camera* GetCurrentCamera();
+        BasicCamera* GetCurrentCamera();
 
         Graphics::DirectionalLight* GetDirectionalLight();
 
-        std::vector<Graphics::PointLight*> GetPointLight();
+        std::unordered_map<std::string, Graphics::GUIComponent*> GetGUIStack();
+
+        void PushGUI(const std::string& name, Graphics::GUIComponent* gui);
+
+        Graphics::Font* GetFont(std::string& fileName);
+
+        GameObject* GetGameObjectByName(const std::string& gameObjectName);
+
+        std::vector<Graphics::PointLight*> GetPointLights();
+
+        std::vector<Graphics::SpotLight*> GetSpotLights();
 
         glm::mat4 GetProjection();
+
+        Window* GetWindow();
+
+        bool IsNight();
+
+        bool IsWinner() const;
+
+        bool IsPrintInfo();
 
     protected:
 
@@ -90,9 +126,13 @@ namespace Engine
 
         void _CreateCamera();
 
-        void _CreateTextures();
+        void _CreateLights();
 
-        GameObject* _GetGameObjectByName(const std::string& gameObjectName);
+        void _CreateMaterials();
+
+        void _CreateModels();
+
+        void _CreateSkybox();
 
         void _InitGLEW();
 
@@ -102,7 +142,13 @@ namespace Engine
 
         void _SetupOpenGLAttributes() const;
 
-        void _CreateLights();
+        void _RenderMinimap();
+
+        void _RenderGUI();
+
+        void _RenderScene(unsigned int frameBuffer);
+
+        void _CreateTrees(Graphics::Model* treeModel);
     };
 
 } // namespace Engine

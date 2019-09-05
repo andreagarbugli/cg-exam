@@ -1,7 +1,10 @@
-target_sources(cg-exercises
+target_sources(cg-exam
         PRIVATE
-        ${CMAKE_CURRENT_LIST_DIR}/Box.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/Box.hpp
         ${CMAKE_CURRENT_LIST_DIR}/Car.cpp
         ${CMAKE_CURRENT_LIST_DIR}/Car.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Menu.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/Minimap.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/Minimap.hpp
+        ${CMAKE_CURRENT_LIST_DIR}/StaticObject.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/StaticObject.hpp
         )
